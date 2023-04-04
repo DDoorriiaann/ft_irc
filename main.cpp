@@ -13,12 +13,16 @@
 #include "Classes/Server/Server.hpp"
 #include "Classes/Client/Client.hpp"
 
+#define	PORT_INDEX 1
+#define	PWD_INDEX 2
+
 int	main(int ac, char **av)
 {
-	if (ac != 2 || checkPort(av[1]) == FAILURE)
-		return (EXIT_FAILURE);
+	Server	server; // Run the server on the port -> av[1].
 
-	Server	server(atoi(av[1])); // Run the server on the port -> av[1].
-	manaTcpServer(server);
+	if (ac != 3 || checkPort(av[PORT_INDEX]) == FAILURE)
+		return (EXIT_FAILURE);
+	server.init(atoi(av[PORT_INDEX]), av[PWD_INDEX]);
+	server.run();
 	return (EXIT_SUCCESS);
 }
