@@ -90,6 +90,8 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 		if (command == "join") {
 			std::string channelName;
 			iss >> channelName;
+			//Supprimer le #
+			channelName = channelName.substr(1);
 
 			if (!channelName.empty()) {
 				// Traiter la commande /join
@@ -105,27 +107,27 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	}
 	else {
 		// Traiter le message en tant que message de chat normal
-		if (buf[0] != '/') {
-			std::string message(buf);
-			std::istringstream iss(message);
-			std::string channelIndicator;
-			iss >> channelIndicator;
 
-			if (channelIndicator.size() > 1 && channelIndicator[0] == '#') {
-				// Le message est destiné à une channel spécifique
-				std::string channelName = channelIndicator.substr(1);
-				std::string messageToSend;
-				std::getline(iss, messageToSend);
+		std::string message(buf);
+		std::istringstream iss(message);
+		std::string channelIndicator;
+		iss >> channelIndicator;
 
-				// Envoyer le message à la channel spécifique
-				sendMessageToChannel(channelName, client.getClientUsername(), messageToSend);
-			}
-			else {
-				// Traiter le message comme un message normal sans channel spécifique
-				send(clientSocket, &MSG_SENT_SUCCESS, sizeof(MSG_SENT_SUCCESS), 0);
-				send(clientSocket, &"\033[1;0m> \033[0m", sizeof("\033[1;0m> \033[0m"), 0);
-				std::cout << client.getClientUsername() << ": " << buf << std::endl;
-			}
+		if (channelIndicator.size() > 1 && channelIndicator[0] == '#') {
+			std::cout << "check channel indicator : " << channelIndicator << std::endl;
+			// Le message est destiné à une channel spécifique
+			std::string channelName = channelIndicator.substr(1);
+			std::string messageToSend;
+			std::getline(iss, messageToSend);
+
+			// Envoyer le message à la channel spécifique
+			sendMessageToChannel(channelName, client.getClientUsername(), messageToSend);
+		}
+		else {
+			// Traiter le message comme un message normal sans channel spécifique
+			send(clientSocket, &MSG_SENT_SUCCESS, sizeof(MSG_SENT_SUCCESS), 0);
+			send(clientSocket, &"\033[1;0m> \033[0m", sizeof("\033[1;0m> \033[0m"), 0);
+			std::cout << client.getClientUsername() << ": " << buf << std::endl;
 		}
 	}
 }
