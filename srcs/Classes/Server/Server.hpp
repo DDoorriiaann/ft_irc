@@ -2,6 +2,7 @@
 #define Server_HPP
 
 #include "../Client/Client.hpp"
+#include "../Channel/Channel.hpp"
 #include <iostream>
 #include <string>
 #include <netinet/in.h>
@@ -12,6 +13,8 @@
 #include <arpa/inet.h>
 #include <poll.h>
 #include <vector>
+#include <map>
+#include <sstream>
 
 #define CONTINUE 1
 #define	STOP 0
@@ -33,22 +36,23 @@
 class Client;
 class Server
 {
-	public:
+public:
 
-   		Server(void); //Canonical
-    	Server(Server const & copy); //Canonical
-    	~Server(); //Canonical
+	Server(void); //Canonical
+	Server(Server const& copy); //Canonical
+	~Server(); //Canonical
 
-    	Server	&operator=(Server const & rhs); //Canonical
+	Server& operator=(Server const& rhs); //Canonical
 
-		void	run(void);
-		void	init(int port, std::string pwd);
+	void	run(void);
+	void	init(int port, std::string pwd);
+
 
 		int		searchClient(std::string userName);
 		int		getServerSocket(void) const;
 		int		getNbrClient(void) const;
 		Client	&getClient(int index);
-		void	setClient(Client &client);
+	void	setClient(Client &client);
 
 	private:
 
@@ -59,8 +63,7 @@ class Server
 		int		_checkClientStatus(Client &client, std::string clientEntry, int clientSocket, int clientStatus);
 		int		_isPwd(std::string clientEntry);
 		int		_sendPrivateChat(std::string srcUserName, std::string destUserName, std::string clientMsg, int clientSocket);
-		int		_handleClientEntry(Client &client, std::string clientEntry);
-	
+		
 		std::string			_serverPwd;
 		int					_socketServer;
 		int					_nbrClient;
