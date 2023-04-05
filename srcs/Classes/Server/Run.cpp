@@ -93,14 +93,22 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 
 			if (!channelName.empty()) {
 				// Traiter la commande /join
-				joinChannel(channelName, client.getClientUsername());
+				//joinChannel(channelName, client.getClientUsername());
 			}
 			else {
 				// Gérer l'erreur (par exemple, envoyer un message d'erreur à l'utilisateur)
 			}
 		}
+		else if (command == "msg")
+		{
+			_sendPrivateChat(iss, client, clientSocket);
+			send(clientSocket, &"\033[1;0m> \033[0m", sizeof("\033[1;0m> \033[0m"), 0);
+			return ;
+		}
 		else {
-			// Gérer d'autres commandes ou les commandes inconnues
+			send(clientSocket, &MSG_SENT_SUCCESS, sizeof(MSG_SENT_SUCCESS), 0);
+			send(clientSocket, &"\033[1;0m> \033[0m", sizeof("\033[1;0m> \033[0m"), 0);
+			return ;
 		}
 	}
 	else {
@@ -118,7 +126,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 				std::getline(iss, messageToSend);
 
 				// Envoyer le message à la channel spécifique
-				sendMessageToChannel(channelName, client.getClientUsername(), messageToSend);
+				//sendMessageToChannel(channelName, client.getClientUsername(), messageToSend);
 			}
 			else {
 				// Traiter le message comme un message normal sans channel spécifique

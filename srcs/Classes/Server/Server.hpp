@@ -25,13 +25,13 @@
 #define USERNAME_ENTRY_STATUS	1
 #define	CONNECTED				2
 
-#define	MSG_CREATION_SUCCESS			"\033[1;32m[INFO]\033[0m: The server as been created succesfully ✅"
-#define	MSG_CONNECTED					"\033[1;32m[INFO]\033[0m: Please enter the password.\nPassword: "
-#define	NEW_USER_MSG 					"\033[1;32m[INFO]\033[0m: New user on DG-Chat 🎉"
-#define	MSG_SENT_SUCCESS				"\033[1;32m[INFO]\033[0m: Your message has been send.\n"
-#define	MSG_WRONG_PWD					"\033[1;31m[ERROR]\033[0m: Wrong Password.\nPassword: "
-#define	MSG_ENTER_USRNM					"\033[1;32m[INFO]\033[0m: Enter an username: "
-#define	WELCOME							"\033[1;32mCONNECTED ✅\n[INFO]\033[0m: Welcome "
+#define	MSG_CREATION_SUCCESS			">\033[1;32m [INFO]\033[0m: The server as been created succesfully ✅"
+#define	MSG_CONNECTED					">\033[1;32m [INFO]\033[0m: Please enter the password.\nPassword: "
+#define	NEW_USER_MSG 					">\033[1;32m [INFO]\033[0m: New user on DG-Chat 🎉"
+#define	MSG_SENT_SUCCESS				">\033[1;32m [INFO]\033[0m: Your message has been send.\n"
+#define	MSG_WRONG_PWD					">\033[1;31m [ERROR]\033[0m: Wrong Password.\nPassword: "
+#define	MSG_ENTER_USRNM					">\033[1;32m [INFO]\033[0m: Enter an username: "
+#define	WELCOME							">\033[1;32m CONNECTED ✅\033[0m\n> \033[1;32m[INFO]\033[0m: Welcome "
 
 class Client;
 class Server
@@ -47,27 +47,35 @@ public:
 	void	run(void);
 	void	init(int port, std::string pwd);
 
+	int		getServerSocket(void) const;
+	int		getNbrClient(void) const;
+	Client& getClient(int index);
+	void	setClient(Client& client);
 
-		int		searchClient(std::string userName);
-		int		getServerSocket(void) const;
-		int		getNbrClient(void) const;
-		Client	&getClient(int index);
-	void	setClient(Client &client);
+	//CHANNELS
 
-	private:
+	bool createChannel(const std::string& name);
+	bool joinChannel(const std::string& channelName, const std::string& user);
+	bool leaveChannel(const std::string& channelName, const std::string& user);
+	const std::map<std::string, Channel>& getChannels() const;
+	void 	sendMessageToChannel(const std::string& channelName, const std::string& username, const std::string& message);
 
-		void	_addUser(sockaddr_in &addrClient);
-		int		_resetFd(fd_set	&read_fd_set);
-		void	_handelChatEntry(Client &client, int clientSocket);
-		void	_checkNewEntries(fd_set read_fd_set);
-		int		_checkClientStatus(Client &client, std::string clientEntry, int clientSocket, int clientStatus);
-		int		_isPwd(std::string clientEntry);
-		int		_sendPrivateChat(std::string srcUserName, std::string destUserName, std::string clientMsg, int clientSocket);
-		
-		std::string			_serverPwd;
-		int					_socketServer;
-		int					_nbrClient;
-		std::vector<Client>	_client;
+private:
+
+	int		searchClient(std::string userName);
+	void	_addUser(sockaddr_in& addrClient);
+	int		_resetFd(fd_set& read_fd_set);
+	void	_handelChatEntry(Client& client, int clientSocket);
+	void	_checkNewEntries(fd_set read_fd_set);
+	int		_checkClientStatus(Client& client, std::string clientEntry, int clientSocket, int clientStatus);
+	int		_isPwd(std::string clientEntry);
+	int 	_sendPrivateChat(std::istringstream &iss, Client &client, int clientSocket);
+
+	std::string			_serverPwd;
+	int					_socketServer;
+	int					_nbrClient;
+	std::vector<Client>	_client;
+	std::map<std::string, Channel> _channels;
 };
 
 #endif 
