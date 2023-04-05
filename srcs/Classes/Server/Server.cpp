@@ -52,3 +52,18 @@ void	Server::setClient(Client &client)
 	this->_nbrClient++;
 	return ;
 }
+
+//////////////// Function //////////////
+int	Server::searchClient(std::string userName)
+{
+	int index;
+
+	index = 0;
+	while (index < _nbrClient)
+	{
+		if (_client[index].getClientUsername() == userName)
+			return (index);
+		index++;
+	}
+	return (-1);
+}

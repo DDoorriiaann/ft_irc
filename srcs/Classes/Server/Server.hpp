@@ -44,6 +44,7 @@ class Server
 		void	run(void);
 		void	init(int port, std::string pwd);
 
+		int		searchClient(std::string userName);
 		int		getServerSocket(void) const;
 		int		getNbrClient(void) const;
 		Client	&getClient(int index);
