@@ -66,16 +66,26 @@ bool Server::createChannel(const std::string& name) {
 
 bool Server::joinChannel(const std::string& channelName, const std::string& user) {
 	std::map<std::string, Channel>::iterator it = _channels.find(channelName);
+	int userSocket = _client[searchClient(user)].getClientSocket();
 
 	if (it == _channels.end()) {
 		// Si la channel n'existe pas, la créer et définir l'utilisateur comme opérateur
 		Channel newChannel(channelName);
 		newChannel.setOperator(user);
+		newChannel.join(user);
 		_channels.insert(std::make_pair(channelName, newChannel));
+		std::cout << "New channel created : " << channelName << std::endl;
+
+		std::string message = "You've just created a new channel : " + channelName + "\n";
+		send(userSocket, message.c_str(), message.size(), 0);
+		send(userSocket, "> ", 2, 0);
 	}
 	else {
 		// Sinon, rejoindre la channel existante
 		it->second.join(user);
+		std::string message = "You're now member of the channel " + channelName + "\n";
+		send(userSocket, message.c_str(), message.size(), 0);
+		send(userSocket, "> ", 2, 0);
 	}
 	return true;
 }
@@ -108,6 +118,7 @@ const std::map<std::string, Channel>& Server::getChannels() const {
 void Server::sendMessageToChannel(const std::string& channelName, const std::string& username, const std::string& message) {
 	// Rechercher la channel spécifiée
 	std::map<std::string, Channel>::iterator it = _channels.find(channelName);
+	int senderSocket = _client[searchClient(username)].getClientSocket();
 
 	if (it != _channels.end()) {
 		// Channel trouvée
@@ -115,19 +126,42 @@ void Server::sendMessageToChannel(const std::string& channelName, const std::str
 		std::set<std::string> users = channel.getUsers();
 
 		// Construire le message complet à envoyer
-		std::string fullMessage = "[" + channelName + "] " + username + ": " + message;
+		std::string fullMessage = "\n[" + channelName + "] " + username + ": " + message + "\n> ";
 
-		// Envoyer le message à tous les utilisateurs de la channel
-		// for (const std::string& user : users) {
-		// 	// Récupérer le socket du client (vous devez implémenter cette fonction getClientSocketByUsername)
-		// 	int clientSocket = 1; //getClientSocketByUsername(user);
+		//Envoyer le message à tous les utilisateurs de la channel
+		std::set<std::string>::const_iterator it;
+		for (it = users.begin(); it != users.end(); ++it) {
+			const std::string& user = *it;
 
-		// 	if (clientSocket != -1) {
-		// 		send(clientSocket, fullMessage.c_str(), fullMessage.size(), 0);
-		// 	}
-		// }
+			// Récupérer le socket du client
+			int clientSocket = _client[searchClient(user)].getClientSocket(); //getClientSocketByUsername(user);
+
+			if (clientSocket != -1 && clientSocket != senderSocket) {
+				send(clientSocket, fullMessage.c_str(), fullMessage.size(), 0);
+			}
+		}
+		send(senderSocket, "> ", 2, 0);
 	}
 	else {
 		// La channel spécifiée n'existe pas , renvoyer un message d'erreur//
+
+		std::string errorMessage = "channel not found\n> ";
+		send(senderSocket, errorMessage.c_str(), errorMessage.size(), 0);
 	}
+}
+
+
+//////////////// Function //////////////
+int    Server::searchClient(std::string userName)
+{
+	int index;
+
+	index = 0;
+	while (index < _nbrClient)
+	{
+		if (_client[index].getClientUsername() == userName)
+			return (index);
+		index++;
+	}
+	return (-1);
 }

@@ -51,6 +51,7 @@ public:
 	int		getNbrClient(void) const;
 	Client& getClient(int index);
 	void	setClient(Client& client);
+	int		searchClient(std::string userName);
 
 	//CHANNELS
 
