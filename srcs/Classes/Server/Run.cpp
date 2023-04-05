@@ -29,10 +29,10 @@ void	Server::run(void)
 			_checkNewEntries(read_fd_set);
 		}
 	}
-	return ;
+	return;
 }
 
-int	Server::_resetFd(fd_set	&read_fd_set)
+int	Server::_resetFd(fd_set& read_fd_set)
 {
 	FD_ZERO(&read_fd_set);
 	FD_SET(_socketServer, &read_fd_set);
@@ -45,7 +45,7 @@ int	Server::_resetFd(fd_set	&read_fd_set)
 	return (this->getClient(_nbrClient - 1).getClientSocket()); // this return is for keep the last FD_SET use in select() func
 }
 
-void	Server::_addUser(sockaddr_in &addrClient)
+void	Server::_addUser(sockaddr_in& addrClient)
 {
 	Client		client("unknown");
 	socklen_t	csize = sizeof(int);
@@ -58,18 +58,18 @@ void	Server::_addUser(sockaddr_in &addrClient)
 
 	send(client.getClientSocket(), &MSG_CONNECTED, sizeof(MSG_CONNECTED), 0);
 	std::cout << NEW_USER_MSG << std::endl;
-	return ;
+	return;
 }
 
 void	Server::_checkNewEntries(fd_set read_fd_set)
 {
-	for	(int i = 0; i < _nbrClient; i++)
+	for (int i = 0; i < _nbrClient; i++)
 		if (FD_ISSET(this->getClient(i).getClientSocket(), &read_fd_set))
-				_handelChatEntry(this->getClient(i), this->getClient(i).getClientSocket());
-	return ;
+			_handelChatEntry(this->getClient(i), this->getClient(i).getClientSocket());
+	return;
 }
 
-void	Server::_handelChatEntry(Client &client, int clientSocket)
+void	Server::_handelChatEntry(Client& client, int clientSocket)
 {
 	int		ret;
 	char	buf[1024];
@@ -78,12 +78,54 @@ void	Server::_handelChatEntry(Client &client, int clientSocket)
 	buf[ret - 1] = '\0';
 
 	if (_checkClientStatus(client, buf, clientSocket, client.getClientStatus()) == STOP)
-		return ;
+		return;
+	// Vérifier si le message commence par un slash (/)
+	if (buf[0] == '/') {
+		// Extraire la commande et les arguments du message
+		std::string message(buf + 1);
+		std::istringstream iss(message);
+		std::string command;
+		iss >> command;
 
-	/////
-	// It will be necessary to process the command line that we receive first.
-	/////
-	send(clientSocket, &MSG_SENT_SUCCESS, sizeof(MSG_SENT_SUCCESS), 0);
-	send(clientSocket, &"\033[1;0m> \033[0m", sizeof("\033[1;0m> \033[0m"), 0);
-	std::cout << client.getClientUsername() << ": "<< buf << std::endl;
+		if (command == "join") {
+			std::string channelName;
+			iss >> channelName;
+
+			if (!channelName.empty()) {
+				// Traiter la commande /join
+				joinChannel(channelName, client.getClientUsername());
+			}
+			else {
+				// Gérer l'erreur (par exemple, envoyer un message d'erreur à l'utilisateur)
+			}
+		}
+		else {
+			// Gérer d'autres commandes ou les commandes inconnues
+		}
+	}
+	else {
+		// Traiter le message en tant que message de chat normal
+		if (buf[0] != '/') {
+			std::string message(buf);
+			std::istringstream iss(message);
+			std::string channelIndicator;
+			iss >> channelIndicator;
+
+			if (channelIndicator.size() > 1 && channelIndicator[0] == '#') {
+				// Le message est destiné à une channel spécifique
+				std::string channelName = channelIndicator.substr(1);
+				std::string messageToSend;
+				std::getline(iss, messageToSend);
+
+				// Envoyer le message à la channel spécifique
+				sendMessageToChannel(channelName, client.getClientUsername(), messageToSend);
+			}
+			else {
+				// Traiter le message comme un message normal sans channel spécifique
+				send(clientSocket, &MSG_SENT_SUCCESS, sizeof(MSG_SENT_SUCCESS), 0);
+				send(clientSocket, &"\033[1;0m> \033[0m", sizeof("\033[1;0m> \033[0m"), 0);
+				std::cout << client.getClientUsername() << ": " << buf << std::endl;
+			}
+		}
+	}
 }
