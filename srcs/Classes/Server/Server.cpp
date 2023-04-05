@@ -27,38 +27,24 @@ Server & Server::operator=(Server const & rhs) //Canonical
     return *this;
 }
 
-Server::Server(unsigned short port)
-{
-	struct	sockaddr_in	addrServer;
+//////////////// GET ////////////////
 
-	this->_socketServer = socket(AF_INET, SOCK_STREAM, 0);
-	this->_nbrClient = 0;
-
-	addrServer.sin_addr.s_addr = inet_addr("127.0.0.1");
-	addrServer.sin_family = AF_INET;
-	addrServer.sin_port = htons(port);
-
-	bind(this->_socketServer, (const struct sockaddr *)&addrServer, sizeof(addrServer));
-	listen(this->_socketServer, 10);
-
-	std::cout << MSG_CREATION_SUCCESS << std::endl;
-	return ;
-}
-
-Client	Server::getClient(int index)
+Client	&Server::getClient(int index)
 {
 	return (this->_client[index]);
 }
 
-int		Server::getServerSocket(void)
+int		Server::getServerSocket(void) const
 {
 	return (this->_socketServer);
 }
 
-int		Server::getNbrClient(void)
+int		Server::getNbrClient(void) const
 {
 	return (this->_nbrClient);
 }
+
+//////////////// SET ////////////////
 
 void	Server::setClient(Client &client)
 {

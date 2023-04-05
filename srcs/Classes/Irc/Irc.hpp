@@ -17,8 +17,6 @@
 
 #define SUCCESS 1
 #define FAILURE 0
-#define	NEW_USER_MSG 			"\033[1;32m🎉[INFO]🎉\033[0m: New user on DG-Chat"
-#define	MSG_SENT_SUCCESS	"\033[1;32m[INFO]\033[0m: Your message has been send.\n"
 
 ////// Utils Folder
 int		checkPort(char *stringPort);
