@@ -15,9 +15,9 @@
 #define	PRIVATE_CHAT_HEADER "\033[1;35m[PRIVATE CHAT]\033[0m "
 #define ERROR_UNKNOWN_CLIENT "\033[1;31m[ERROR]\033[0m: This user doesn't exit.\n"
 
-void	sendAllMsgToClient(std::istringstream &iss, int destSocket);
+void	sendAllMsgToClient(std::istringstream& iss, int destSocket);
 
-int Server::_sendPrivateChat(std::istringstream &iss, Client &client, int clientSocket)
+int Server::_sendPrivateChat(std::istringstream& iss, Client& client, int clientSocket)
 {
 	std::string	destUserName;
 	int			destClientIndex;
@@ -44,14 +44,10 @@ int Server::_sendPrivateChat(std::istringstream &iss, Client &client, int client
 	return (SUCCESS);
 }
 
-void	sendAllMsgToClient(std::istringstream &iss, int destSocket)
+void	sendAllMsgToClient(std::istringstream& iss, int destSocket)
 {
 	std::string message;
 
-	while (iss)
-	{
-		iss >> message;
-		message += " ";
-		send(destSocket, message.c_str(), sizeof(message.c_str()), 0);
-	}
+	getline(iss, message);
+	send(destSocket, message.c_str(), message.length(), 0);
 }
