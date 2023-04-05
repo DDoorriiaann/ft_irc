@@ -64,7 +64,6 @@ public:
 
 private:
 
-	int		searchClient(std::string userName);
 	void	_addUser(sockaddr_in& addrClient);
 	int		_resetFd(fd_set& read_fd_set);
 	void	_handelChatEntry(Client& client, int clientSocket);

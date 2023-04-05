@@ -94,8 +94,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 			channelName = channelName.substr(1);
 
 			if (!channelName.empty()) {
-				// Traiter la commande /join
-				//joinChannel(channelName, client.getClientUsername());
+				joinChannel(channelName, client.getClientUsername());
 			}
 			else {
 				// Gérer l'erreur (par exemple, envoyer un message d'erreur à l'utilisateur)
