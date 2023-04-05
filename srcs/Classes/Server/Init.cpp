@@ -20,7 +20,7 @@ void	Server::init(int port, std::string pwd)
 	_nbrClient = 0;
 
 	// This is the id of the socket.
-	addrServer.sin_addr.s_addr = inet_addr("127.0.0.1");
+	addrServer.sin_addr.s_addr = htonl(INADDR_ANY);
 	addrServer.sin_family = AF_INET;
 	addrServer.sin_port = htons(port);
 

@@ -31,9 +31,10 @@ int	Server::_checkClientStatus(Client& client, std::string clientEntry, int clie
 		client.setClientUsername(clientEntry);
 		client.setClientStatus(CONNECTED);
 		send(clientSocket, &WELCOME, sizeof(WELCOME), 0);
+
 		send(clientSocket, client.getClientUsername().c_str(), client.getClientUsername().length(), 0);
-		send(clientSocket, &" \n", sizeof(" \n"), 0);
-		send(clientSocket, &"\033[1;0m> \033[0m", sizeof("\033[1;0m> \033[0m"), 0);
+		send(clientSocket, &" !\n\033[1;0m> \033[0m", sizeof(" !\n\033[1;0m> \033[0m"), 0);
+
 		return (STOP);
 	}
 }

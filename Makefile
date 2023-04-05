@@ -9,6 +9,7 @@ SRC = 	Classes/Client/Client.cpp\
 		Classes/Server/Run.cpp\
 		Classes/Server/Server.cpp\
 		Classes/Channel/Channel.cpp\
+		Classes/Server/Cmds/Private_msg/sendPrivateMsg.cpp\
 		Utils/checkPort.cpp\
 		main.cpp\
 
