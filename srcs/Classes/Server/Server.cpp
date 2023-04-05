@@ -150,9 +150,9 @@ void Server::sendMessageToChannel(const std::string& channelName, const std::str
 	}
 }
 
-
 //////////////// Function //////////////
 int    Server::searchClient(std::string userName)
+
 {
 	int index;
 
