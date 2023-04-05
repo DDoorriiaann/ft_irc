@@ -80,6 +80,8 @@ void	Server::_handelChatEntry(Client &client, int clientSocket)
 	if (_checkClientStatus(client, buf, clientSocket, client.getClientStatus()) == STOP)
 		return ;
 
+
+	_handleClientEntry(client, buf);
 	/////
 	// It will be necessary to process the command line that we receive first.
 	/////

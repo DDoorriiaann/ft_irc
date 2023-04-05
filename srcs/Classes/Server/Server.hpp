@@ -58,7 +58,9 @@ class Server
 		void	_checkNewEntries(fd_set read_fd_set);
 		int		_checkClientStatus(Client &client, std::string clientEntry, int clientSocket, int clientStatus);
 		int		_isPwd(std::string clientEntry);
-
+		int		_sendPrivateChat(std::string srcUserName, std::string destUserName, std::string clientMsg, int clientSocket);
+		int		_handleClientEntry(Client &client, std::string clientEntry);
+	
 		std::string			_serverPwd;
 		int					_socketServer;
 		int					_nbrClient;
