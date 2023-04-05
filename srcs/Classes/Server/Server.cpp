@@ -131,3 +131,18 @@ void Server::sendMessageToChannel(const std::string& channelName, const std::str
 		// La channel spécifiée n'existe pas , renvoyer un message d'erreur//
 	}
 }
+
+//////////////// Function //////////////
+int	Server::searchClient(std::string userName)
+{
+	int index;
+
+	index = 0;
+	while (index < _nbrClient)
+	{
+		if (_client[index].getClientUsername() == userName)
+			return (index);
+		index++;
+	}
+	return (-1);
+}

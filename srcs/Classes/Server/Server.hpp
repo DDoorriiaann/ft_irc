@@ -47,10 +47,12 @@ public:
 	void	run(void);
 	void	init(int port, std::string pwd);
 
-	int		getServerSocket(void) const;
-	int		getNbrClient(void) const;
-	Client& getClient(int index);
-	void	setClient(Client& client);
+
+		int		searchClient(std::string userName);
+		int		getServerSocket(void) const;
+		int		getNbrClient(void) const;
+		Client	&getClient(int index);
+	void	setClient(Client &client);
 
 	//CHANNELS
 
