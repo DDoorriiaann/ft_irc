@@ -34,8 +34,8 @@ int Server::_sendPrivateChat(std::istringstream& iss, Client& client, int client
 
 	destSocket = getClient(searchClient(destUserName)).getClientSocket();
 	send(destSocket, PRIVATE_CHAT_HEADER, sizeof(PRIVATE_CHAT_HEADER), 0);
-	send(destSocket, client.getClientUsername().c_str(), sizeof(client.getClientUsername().c_str()), 0);
-	send(destSocket, ": ", sizeof(": "), 0);
+	send(destSocket, client.getClientUsername().c_str(), client.getClientUsername().length(), 0);
+	send(destSocket, ":", sizeof(":"), 0);
 	sendAllMsgToClient(iss, destSocket);
 	send(destSocket, "\n> ", sizeof("\n> "), 0);
 

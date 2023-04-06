@@ -15,7 +15,7 @@
 int	checkNoWhiteSpace(std::string str)
 {
 	for(int i = 0; str[i] != '\0'; i++)
-		if (isspace(str[i]) == SUCCESS)
+		if (isspace(str[i]))
 			return (FAILURE);
 	return (SUCCESS);
 }
