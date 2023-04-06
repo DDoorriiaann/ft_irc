@@ -27,16 +27,15 @@
 
 #define UNKNOWN -1
 
-#define HEADER_INFO						">\033[1;32m [INFO]\033[0m: "
-#define	HEADER_ERROR					">\033[1;31m [ERROR]\033[0m: "
-
-#define	MSG_CREATION_SUCCESS			">\033[1;32m [INFO]\033[0m: The server as been created succesfully ✅"
-#define	MSG_CONNECTED					">\033[1;32m [INFO]\033[0m: Please enter the password.\nPassword: "
-#define	NEW_USER_MSG 					">\033[1;32m [INFO]\033[0m: New user on DG-Chat 🎉"
-#define	MSG_SENT_SUCCESS				">\033[1;32m [INFO]\033[0m: Your message has been send.\n"
-#define	MSG_WRONG_PWD					">\033[1;31m [ERROR]\033[0m: Wrong Password.\nPassword: "
-#define	MSG_ENTER_USRNM					">\033[1;32m [INFO]\033[0m: Enter an username: "
-#define	WELCOME							">\033[1;32m CONNECTED ✅\033[0m\n> \033[1;32m[INFO]\033[0m: Welcome "
+#define HEADER_INFO						"[INFO]: "
+#define	HEADER_ERROR					"[ERROR]: "
+#define	MSG_CREATION_SUCCESS			"[INFO]: The server as been created succesfully ✅"
+#define	MSG_ENTER_PASSWORD				"[INFO]: Please enter the password.\n "
+#define	NEW_USER_MSG 					"[INFO]: New user on DG-Chat 🎉"
+#define	MSG_SENT_SUCCESS				"[INFO]: Your message has been send.\n"
+#define	MSG_WRONG_PWD					"[ERROR]: Wrong Password.\n"
+#define	MSG_ENTER_USRNM					"[INFO]: Enter an username: "
+#define	WELCOME							"[INFO]: Connected. Now logging in. \n"
 
 class Client;
 class Server
@@ -75,8 +74,9 @@ private:
 	void	_checkNewEntries(fd_set read_fd_set);
 	int		_checkClientStatus(Client& client, std::string clientEntry, int clientSocket, int clientStatus);
 	int		_isPwd(std::string clientEntry);
-	int 	_sendPrivateChat(std::istringstream &iss, Client &client, int clientSocket);
-	void	_nick(std::istringstream &iss, Client& client, int clientSocket);
+	int		_isPwd_hexchat(std::string clientEntry);
+	int 	_sendPrivateChat(std::istringstream& iss, Client& client, int clientSocket);
+	void	_nick(std::istringstream& iss, Client& client, int clientSocket);
 
 	std::string			_serverPwd;
 	int					_socketServer;

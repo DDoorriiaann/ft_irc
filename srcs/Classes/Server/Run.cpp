@@ -53,10 +53,9 @@ void	Server::_addUser(sockaddr_in& addrClient)
 
 	socketClient = accept(_socketServer, (struct sockaddr*)&addrClient, &csize);
 	client.setClientSocket(socketClient);
-
 	this->setClient(client);
 
-	send(client.getClientSocket(), &MSG_CONNECTED, sizeof(MSG_CONNECTED), 0);
+
 	std::cout << NEW_USER_MSG << std::endl;
 	return;
 }
@@ -65,7 +64,10 @@ void	Server::_checkNewEntries(fd_set read_fd_set)
 {
 	for (int i = 0; i < _nbrClient; i++)
 		if (FD_ISSET(this->getClient(i).getClientSocket(), &read_fd_set))
+		{
 			_handelChatEntry(this->getClient(i), this->getClient(i).getClientSocket());
+		}
+
 	return;
 }
 
@@ -76,18 +78,35 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 
 	ret = recv(clientSocket, &buf, sizeof(buf), 0);
 	buf[ret - 1] = '\0';
-
 	if (_checkClientStatus(client, buf, clientSocket, client.getClientStatus()) == STOP)
 		return;
-	// Vérifier si le message commence par un slash (/)
-	if (buf[0] == '/') {
-		// Extraire la commande et les arguments du message
-		std::string message(buf + 1);
-		std::istringstream iss(message);
-		std::string command;
-		iss >> command;
 
+	// Vérifier si le message provient d'une commande HexChat:
+	std::string message(buf);
+	std::istringstream iss(message);
+	std::string header;
+	std::string command;
+	bool isHexChatCmd = false;
+	iss >> header;
+	if (header.compare("cmd") == 0)
+	{
+		iss >> command;
+		isHexChatCmd = true;
+	}
+	else
+		command = header;
+
+	std::cout << "command : " << command << std::endl;
+
+	// Vérifier si le message commence par un slash (/)
+	if (command[0] == '/') {
+		std::cout << " \'/\' detected" << std::endl;
+		command = command.substr(1);
+		// Extraire la commande et les arguments du message
+		// std::string message(buf + 1);
+		// std::istringstream iss(message);
 		if (command == "join") {
+			std::cout << "join detected" << std::endl;
 			std::string channelName;
 			iss >> channelName;
 			//Supprimer le #
@@ -98,13 +117,15 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 			}
 			else {
 				// Gérer l'erreur (par exemple, envoyer un message d'erreur à l'utilisateur)
+				std::string errorMessage = "command not found\n> ";
+				send(clientSocket, errorMessage.c_str(), errorMessage.size(), 0);
 			}
 		}
 		else if (command == "msg")
 		{
 			_sendPrivateChat(iss, client, clientSocket);
-			send(clientSocket, &"\033[1;0m> \033[0m", sizeof("\033[1;0m> \033[0m"), 0);
-			return ;
+			send(clientSocket, &"> ", sizeof("> "), 0);
+			return;
 		}
 		else if (command == "nick")
 		{
@@ -112,16 +133,18 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 		}
 		else {
 			send(clientSocket, &MSG_SENT_SUCCESS, sizeof(MSG_SENT_SUCCESS), 0);
-			send(clientSocket, &"\033[1;0m> \033[0m", sizeof("\033[1;0m> \033[0m"), 0);
-			return ;
+			return;
 		}
 	}
 	else {
 		// Traiter le message en tant que message de chat normal
+		std::cout << "simple message detected" << std::endl;
 		std::string message(buf);
 		std::istringstream iss(message);
 		std::string channelIndicator;
 		iss >> channelIndicator;
+		if (isHexChatCmd)
+			iss >> channelIndicator;
 
 		if (channelIndicator.size() > 1 && channelIndicator[0] == '#') {
 			std::cout << "check channel indicator : " << channelIndicator << std::endl;
@@ -135,8 +158,8 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 		}
 		else {
 			// Traiter le message comme un message normal sans channel spécifique
+			//send(clientSocket, &MSG_SENT_SUCCESS, sizeof(MSG_SENT_SUCCESS), 0);
 			send(clientSocket, &MSG_SENT_SUCCESS, sizeof(MSG_SENT_SUCCESS), 0);
-			send(clientSocket, &"\033[1;0m> \033[0m", sizeof("\033[1;0m> \033[0m"), 0);
 			std::cout << client.getClientUsername() << ": " << buf << std::endl;
 		}
 	}

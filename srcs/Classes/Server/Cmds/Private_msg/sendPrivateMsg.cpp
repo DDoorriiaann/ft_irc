@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 #include "../../Server.hpp"
 
-#define	PRIVATE_CHAT_HEADER "\033[1;35m[PRIVATE CHAT]\033[0m "
-#define ERROR_UNKNOWN_CLIENT "\033[1;31m[ERROR]\033[0m: This user doesn't exit.\n"
+#define	PRIVATE_CHAT_HEADER "[PRIVATE CHAT] "
+#define ERROR_UNKNOWN_CLIENT "[ERROR]: This user doesn't exit.\n"
 
 void	sendAllMsgToClient(std::istringstream& iss, int destSocket);
 

@@ -32,3 +32,4 @@
 *.app
 .vscode/settings.json
 ircserv
+.nfs*
