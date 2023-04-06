@@ -122,8 +122,18 @@ void Server::sendMessageToChannel(const std::string& channelName, const std::str
 
 	if (it != _channels.end()) {
 		// Channel trouvée
+		// Recupérer la liste des users du channel
 		Channel& channel = it->second;
 		std::set<std::string> users = channel.getUsers();
+
+		// Vérifier si le sender est membre de la channel
+		if (users.find(username) == users.end())
+		{
+			std::string errorMessage;
+			errorMessage.append(HEADER_ERROR).append("Message not sent because you are not member of the channel ").append(channelName).append("\n> ");
+			send(senderSocket, errorMessage.c_str(), errorMessage.size(), 0);
+			return;
+		}
 
 		// Construire le message complet à envoyer
 		std::string fullMessage = "\n[" + channelName + "] " + username + ": " + message + "\n> ";
