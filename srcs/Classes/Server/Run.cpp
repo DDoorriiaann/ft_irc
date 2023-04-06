@@ -106,6 +106,10 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 			send(clientSocket, &"\033[1;0m> \033[0m", sizeof("\033[1;0m> \033[0m"), 0);
 			return ;
 		}
+		else if (command == "nick")
+		{
+			_nick(iss, client, clientSocket);
+		}
 		else {
 			send(clientSocket, &MSG_SENT_SUCCESS, sizeof(MSG_SENT_SUCCESS), 0);
 			send(clientSocket, &"\033[1;0m> \033[0m", sizeof("\033[1;0m> \033[0m"), 0);

@@ -25,6 +25,11 @@
 #define USERNAME_ENTRY_STATUS	1
 #define	CONNECTED				2
 
+#define UNKNOWN -1
+
+#define HEADER_INFO						">\033[1;32m [INFO]\033[0m: "
+#define	HEADER_ERROR					">\033[1;31m [ERROR]\033[0m: "
+
 #define	MSG_CREATION_SUCCESS			">\033[1;32m [INFO]\033[0m: The server as been created succesfully ✅"
 #define	MSG_CONNECTED					">\033[1;32m [INFO]\033[0m: Please enter the password.\nPassword: "
 #define	NEW_USER_MSG 					">\033[1;32m [INFO]\033[0m: New user on DG-Chat 🎉"
@@ -71,6 +76,7 @@ private:
 	int		_checkClientStatus(Client& client, std::string clientEntry, int clientSocket, int clientStatus);
 	int		_isPwd(std::string clientEntry);
 	int 	_sendPrivateChat(std::istringstream &iss, Client &client, int clientSocket);
+	void	_nick(std::istringstream &iss, Client& client, int clientSocket);
 
 	std::string			_serverPwd;
 	int					_socketServer;

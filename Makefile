@@ -10,7 +10,9 @@ SRC = 	Classes/Client/Client.cpp\
 		Classes/Server/Server.cpp\
 		Classes/Channel/Channel.cpp\
 		Classes/Server/Cmds/Private_msg/sendPrivateMsg.cpp\
+		Classes/Server/Cmds/Nick/nick.cpp\
 		Utils/checkPort.cpp\
+		Utils/checkWhiteSpace.cpp\
 		main.cpp\
 
 OBJ = $(addprefix $(SRCDIR)/, $(SRC:.cpp=.o))

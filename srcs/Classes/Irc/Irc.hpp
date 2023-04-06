@@ -20,6 +20,5 @@
 
 ////// Utils Folder
 int		checkPort(char *stringPort);
-void	manaTcpServer(Server &server);
 
 #endif 

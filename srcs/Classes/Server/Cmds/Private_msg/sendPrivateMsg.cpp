@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 #include "../../Server.hpp"
 
-#define UNKNOWN -1
 #define	PRIVATE_CHAT_HEADER "\033[1;35m[PRIVATE CHAT]\033[0m "
 #define ERROR_UNKNOWN_CLIENT "\033[1;31m[ERROR]\033[0m: This user doesn't exit.\n"
 
