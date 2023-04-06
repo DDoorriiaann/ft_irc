@@ -87,6 +87,7 @@ bool Server::joinChannel(const std::string& channelName, const std::string& user
 		send(userSocket, message.c_str(), message.size(), 0);
 		send(userSocket, "> ", 2, 0);
 	}
+
 	return true;
 }
 
