@@ -21,24 +21,26 @@ void	Server::_nick(std::istringstream &iss, Client& client, int clientSocket)
 
 	getline(iss, nickName);
 	nickName = nickName.substr(1);
-	if (checkNoWhiteSpace(nickName) == SUCCESS)
+	if (checkNoWhiteSpace(nickName) == FAILURE)
 	{
 		message += HEADER_ERROR;
-		message += "\"" +  nickName + "\"" + " .";
+		message += "Nicknames with spaces are not allowed.\n> ";
 		send(clientSocket, message.c_str(), message.length(), 0);
 		return ;
 	}
 	if (searchClient(nickName) != UNKNOWN)
 	{
 		message += HEADER_ERROR;
-		message += "\"" +  nickName + "\"" + " is already taken.";
+		message += "\"" +  nickName + "\"" + " is already taken.\n> ";
 		send(clientSocket, message.c_str(), message.length(), 0);
 		return ;
 	}
 
+	///// SUCCESS
+
 	client.setClientUsername(nickName);
 	message += HEADER_INFO;
-	message	+= "You are known now with the nick name: " + nickName;
+	message	+= "You are known now with the nick name: " + nickName + ".\n> ";
 	send(clientSocket, message.c_str(), message.length(), 0);
 	return ;
 }
