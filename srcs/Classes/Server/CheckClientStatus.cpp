@@ -27,7 +27,7 @@ int	Server::_checkClientStatus(Client& client, std::string clientEntry, int clie
 	getline(stream, header);
 	header = header.substr(0, header.length() - 1);
 
-	if (header == "CAP LS 302")
+	if (header == HEADER_HXCHAT)
 	{
 		getline(stream, password);
 		getline(stream, nickName);

@@ -157,9 +157,9 @@ void	Server::_joinCmd(std::istringstream &iss, Client client, int clientSocket)
 {
 	std::cout << "join detected" << std::endl;
 	std::string channelName;
+
 	iss >> channelName;
-	//Supprimer le #
-	channelName = channelName.substr(1);
+	channelName = channelName.substr(1); // Delete the #.
 
 	if (!channelName.empty())
 		joinChannel(channelName, client.getClientUsername());

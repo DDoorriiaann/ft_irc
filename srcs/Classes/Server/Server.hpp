@@ -29,6 +29,7 @@
 
 #define HEADER_INFO						"[INFO]: "
 #define	HEADER_ERROR					"[ERROR]: "
+#define	HEADER_HXCHAT					"CAP LS 302"
 #define	MSG_CREATION_SUCCESS			"[INFO]: The server as been created succesfully ✅"
 #define	MSG_ENTER_PASSWORD				"[INFO]: Please enter the password.\n "
 #define	NEW_USER_MSG 					"[INFO]: New user on DG-Chat 🎉"
