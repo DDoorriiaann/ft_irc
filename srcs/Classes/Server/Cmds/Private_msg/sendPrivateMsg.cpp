@@ -12,9 +12,10 @@
 #include "../../Server.hpp"
 
 #define	PRIVATE_CHAT_HEADER "[PRIVATE CHAT] "
+#define ERROR_EMPTY_MSG "[ERROR]: Empty private chat.\n"
 #define ERROR_UNKNOWN_CLIENT "[ERROR]: This user doesn't exit.\n"
 
-void	sendAllMsgToClient(std::istringstream& iss, int destSocket);
+void	sendAllMsgToClient(std::istringstream& iss, Client client, int destSocket, int clientSocket);
 
 int Server::_sendPrivateChat(std::istringstream& iss, Client& client, int clientSocket)
 {
@@ -33,20 +34,27 @@ int Server::_sendPrivateChat(std::istringstream& iss, Client& client, int client
 	}
 
 	destSocket = getClient(searchClient(destUserName)).getClientSocket();
-	message += PRIVATE_CHAT_HEADER + client.getClientUsername() + ":";
-	
-	send(destSocket, message.c_str(), message.length(), 0);
-	sendAllMsgToClient(iss, destSocket);
-	send(clientSocket, MSG_SENT_SUCCESS, sizeof(MSG_SENT_SUCCESS), 0);
+	sendAllMsgToClient(iss, client, destSocket, clientSocket);
 
 	return (SUCCESS);
 }
 
-void	sendAllMsgToClient(std::istringstream& iss, int destSocket)
+void	sendAllMsgToClient(std::istringstream& iss, Client client, int destSocket, int clientSocket)
 {
+	std::string	header;
 	std::string message;
 
 	getline(iss, message);
-	send(destSocket, message.c_str(), message.length(), 0);
+	if (message.empty())
+	{
+		send(clientSocket, ERROR_EMPTY_MSG, sizeof(ERROR_EMPTY_MSG), 0);
+		return ;
+	}
+
+	header += PRIVATE_CHAT_HEADER + client.getClientUsername() + ":" + message;
+	
+	send(destSocket, header.c_str(), header.length(), 0);
 	send(destSocket, "\n", sizeof("\n"), 0);
-}
+	send(clientSocket, MSG_SENT_SUCCESS, sizeof(MSG_SENT_SUCCESS), 0);
+	return ;
+} 	
