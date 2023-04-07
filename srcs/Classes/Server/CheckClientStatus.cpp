@@ -53,8 +53,9 @@ int	Server::_checkClientStatus(Client& client, std::string clientEntry, int clie
 		else 
 		{
 			send(clientSocket, &BAD_PASSWORD, sizeof(BAD_PASSWORD), 0);
-			_nbrClient--;
 			close(clientSocket);
+			_unsetClient(client);
+			_nbrClient--;
 			return (STOP);
 		}
 	}

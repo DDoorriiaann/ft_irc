@@ -16,7 +16,7 @@
 #define	MSG_COMMAND "msg"
 #define	NICK_COMMAND "nick"
 #define	CMD_NOT_FOUND "[ERROR]: Command not found\n"
-#define	CHANNEL_NOT_FOUD "[ERROR]: Channel not found\n"
+#define	CHANNEL_NOT_FOUND "[ERROR]: Channel not found\n"
 #define	NO_CHANNEL_JOINED "No channel joined. Try /join #<channel>\n"
 
 void	Server::run(void)
@@ -62,7 +62,6 @@ void	Server::_addUser(sockaddr_in& addrClient)
 	socketClient = accept(_socketServer, (struct sockaddr*)&addrClient, &csize);
 	client.setClientSocket(socketClient);
 	this->setClient(client);
-
 	std::cout << NEW_USER_MSG << std::endl;
 	return;
 }
@@ -90,6 +89,13 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	char		buf[1024];
 
 	ret = recv(clientSocket, &buf, sizeof(buf), 0);
+	if (ret == 0)
+	{
+		close(clientSocket);
+		_unsetClient(client);
+		_nbrClient--;
+		return ;
+	}
 	buf[ret - 1] = '\0';
 	if (_checkClientStatus(client, buf, clientSocket, client.getClientStatus()) == STOP)
 		return;
@@ -111,13 +117,13 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	if (command[0] == IS_CMD) 
 	{
 		// Traite les commandes donnees par le client
-		std::cout << "Command detected." << std::endl;
+		std::cout << "Command detected." << std::endl; // !DEBUG
 		_handleCmd(iss, command, client, clientSocket);
 	}
 	else 
 	{
 		// Traiter le message en tant que message de chat normal
-		std::cout << "Simple message detected." << std::endl;
+		std::cout << "Simple message detected." << std::endl; // !DEBUG
 		_handelSimpleChat(client, buf, clientSocket, isHexChatCmd);
 	}
 }
@@ -128,7 +134,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 
 void	Server::_handleCmd(std::istringstream &iss, std::string &command, Client client, int clientSocket)
 {
-	std::cout << " \'/\' detected" << std::endl;
+	std::cout << " \'/\' detected" << std::endl; // !DEBUG
 	command = command.substr(1);
 	// Extraire la commande et les arguments du message
 	// std::string message(buf + 1);
@@ -155,7 +161,7 @@ void	Server::_handleCmd(std::istringstream &iss, std::string &command, Client cl
 
 void	Server::_joinCmd(std::istringstream &iss, Client client, int clientSocket)
 {
-	std::cout << "join detected" << std::endl;
+	std::cout << "join detected" << std::endl; // !DEBUG
 	std::string channelName;
 
 	iss >> channelName;
@@ -166,7 +172,7 @@ void	Server::_joinCmd(std::istringstream &iss, Client client, int clientSocket)
 	else
 	{
 		// ERROR MESSAGE: Channel not found.
-		send(clientSocket, &CHANNEL_NOT_FOUD, sizeof(CHANNEL_NOT_FOUD), 0);
+		send(clientSocket, &CHANNEL_NOT_FOUND, sizeof(CHANNEL_NOT_FOUND), 0);
 	}
 	return ;
 }
@@ -188,7 +194,7 @@ void	Server::_handelSimpleChat(Client client, char buf[], int clientSocket, bool
 
 	if (channelIndicator.size() > 1 && channelIndicator[0] == '#') 
 	{
-		std::cout << "check channel indicator : " << channelIndicator << std::endl;
+		std::cout << "check channel indicator : " << channelIndicator << std::endl; // !DEBUG
 		// Le message est destiné à une channel spécifique
 		std::string channelName = channelIndicator.substr(1);
 		std::string messageToSend;

@@ -81,6 +81,7 @@ private:
 	void	_nick(std::istringstream& iss, Client& client, int clientSocket);
 	void	_joinCmd(std::istringstream &iss, Client client, int clientSocket);
 	void	_handelSimpleChat(Client client, char buf[], int clientSocket, bool isHexChatCmd);
+	void	_unsetClient(Client &client);
 
 	std::string			_serverPwd;
 	int					_socketServer;
