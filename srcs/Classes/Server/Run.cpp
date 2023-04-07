@@ -16,6 +16,7 @@
 #define	MSG_COMMAND "msg"
 #define	NICK_COMMAND "nick"
 #define KICK_COMMAND "kick"
+#define QUIT_COMMAND_HEXCHAT "QUIT"
 #define	CMD_NOT_FOUND "[ERROR]: Command not found\n"
 #define	CHANNEL_NOT_FOUND "[ERROR]: Channel not found\n"
 #define	CHANNEL_LIST "No channel specified, active channels are : "
@@ -90,6 +91,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	int			ret;
 	char		buf[1024];
 
+
 	ret = recv(clientSocket, &buf, sizeof(buf), 0);
 	if (ret == 0)
 	{
@@ -99,6 +101,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 		return;
 	}
 	buf[ret - 1] = '\0';
+	std::cout << "Client sends : \n" << buf << std::endl << std::endl; // !DEBUG
 	if (_checkClientStatus(client, buf, clientSocket, client.getClientStatus()) == STOP)
 		return;
 
@@ -107,6 +110,15 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	std::istringstream	iss(message);
 
 	iss >> header;
+	std::cout << "command : \n" << header << std::endl << std::endl; // !DEBUG
+	if (header.compare(QUIT_COMMAND_HEXCHAT) == 0)
+	{
+		close(clientSocket);
+		_unsetClient(client);
+		_nbrClient--;
+		return;
+	}
+
 	if (header.compare("cmd") == 0)
 	{
 		iss >> command;
@@ -114,6 +126,8 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	}
 	else
 		command = header;
+
+
 
 	// Vérifier si le message commence par un slash (/)
 	if (command[0] == IS_CMD)
@@ -137,6 +151,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client client, int clientSocket)
 {
 	std::cout << " \'/\' detected" << std::endl; // !DEBUG
+
 	command = command.substr(1);
 	// Extraire la commande et les arguments du message
 	// std::string message(buf + 1);
