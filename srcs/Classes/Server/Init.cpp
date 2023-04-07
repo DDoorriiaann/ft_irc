@@ -19,14 +19,18 @@ void	Server::init(int port, std::string pwd)
 	_socketServer = socket(AF_INET, SOCK_STREAM, 0);
 	_nbrClient = 0;
 
+	// Enable reuse of same port after crash
+	int enable = 1;
+	setsockopt(_socketServer, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
+
 	// This is the id of the socket.
 	addrServer.sin_addr.s_addr = htonl(INADDR_ANY);
 	addrServer.sin_family = AF_INET;
 	addrServer.sin_port = htons(port);
 
-	bind(_socketServer, (const struct sockaddr *)&addrServer, sizeof(addrServer));
+	bind(_socketServer, (const struct sockaddr*)&addrServer, sizeof(addrServer));
 	listen(_socketServer, 10);
 
 	std::cout << MSG_CREATION_SUCCESS << std::endl;
-	return ;
+	return;
 }
