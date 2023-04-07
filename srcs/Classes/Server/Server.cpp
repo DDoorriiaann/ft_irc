@@ -107,6 +107,16 @@ bool Server::leaveChannel(const std::string& channelName, const std::string& use
 	return false;
 }
 
+bool Server::isValidChannel(const std::string& channelName) const {
+	return  _channels.find(channelName) != _channels.end();
+}
+
+Channel* Server::getChannel(const std::string& channelName) {
+	if (isValidChannel(channelName))
+		return &(_channels.find(channelName)->second);
+	else
+		return NULL;
+}
 
 const std::map<std::string, Channel>& Server::getChannels() const {
 	return _channels;
@@ -149,7 +159,6 @@ void Server::sendMessageToChannel(const std::string& channelName, const std::str
 				send(clientSocket, fullMessage.c_str(), fullMessage.size(), 0);
 			}
 		}
-		send(senderSocket, "> ", 2, 0);
 	}
 	else {
 		// La channel spécifiée n'existe pas , renvoyer un message d'erreur//

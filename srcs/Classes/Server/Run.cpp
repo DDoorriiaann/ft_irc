@@ -15,6 +15,7 @@
 #define	JOIN_COMMAND "join"
 #define	MSG_COMMAND "msg"
 #define	NICK_COMMAND "nick"
+#define KICK_COMMAND "kick"
 #define	CMD_NOT_FOUND "[ERROR]: Command not found\n"
 #define	CHANNEL_NOT_FOUND "[ERROR]: Channel not found\n"
 #define	NO_CHANNEL_JOINED "No channel joined. Try /join #<channel>\n"
@@ -151,6 +152,10 @@ void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client cl
 	else if (command == NICK_COMMAND)
 	{
 		_nick(iss, client, clientSocket);
+	}
+	else if (command == KICK_COMMAND)
+	{
+		_kick(iss, client, clientSocket);
 	}
 	else
 	{

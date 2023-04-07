@@ -32,8 +32,10 @@ Channel& Channel::operator=(Channel const& rhs)
 	if (this != &rhs)
 	{
 		std::set<std::string> usersCopy(rhs.getUsers());
+		std::set<std::string> operatorsCopy(rhs.getOperators());
 		this->_name = rhs._name;
 		this->_users = usersCopy;
+		this->_operators = operatorsCopy;
 	}
 	return *this;
 }
@@ -43,6 +45,8 @@ Channel& Channel::operator=(Channel const& rhs)
 /*
 ** --------------------------------- METHODS ----------------------------------
 */
+
+////// REGULAR USERS FUNCTIONS ///////
 
 const std::string& Channel::getName() const {
 	return _name;
@@ -64,6 +68,8 @@ const std::set<std::string>& Channel::getUsers() const {
 	return _users;
 }
 
+/////// OPERATORS ///////
+
 void Channel::setOperator(const std::string& user) {
 	_operators.insert(user);
 }
@@ -76,9 +82,16 @@ size_t Channel::operatorCount() const {
 	return _operators.size();
 }
 
-/*
-** --------------------------------- ACCESSOR ---------------------------------
-*/
+const std::set<std::string>& Channel::getOperators() const {
+	return _operators;
+}
+
+
+////// KICK USERS //////
+
+void Channel::kickUser(const std::string& user) {
+	_users.erase(user);
+}
 
 
 /* ************************************************************************** */
