@@ -19,6 +19,7 @@
 #define	CMD_NOT_FOUND "[ERROR]: Command not found\n"
 #define	CHANNEL_NOT_FOUND "[ERROR]: Channel not found\n"
 #define	NO_CHANNEL_JOINED "No channel joined. Try /join #<channel>\n"
+#define CHANNEL_REQUIRES_HASHTAG "[ERROR]: A channel name must start with '#'\n"
 
 void	Server::run(void)
 {
@@ -170,8 +171,12 @@ void	Server::_joinCmd(std::istringstream& iss, Client client, int clientSocket)
 	std::string channelName;
 
 	iss >> channelName;
+	if (channelName[0] != '#')
+	{
+		send(clientSocket, &CHANNEL_REQUIRES_HASHTAG, sizeof(CHANNEL_REQUIRES_HASHTAG), 0);
+		return;
+	}
 	channelName = channelName.substr(1); // Delete the #.
-
 	if (!channelName.empty())
 		joinChannel(channelName, client.getClientUsername());
 	else

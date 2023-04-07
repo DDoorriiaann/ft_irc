@@ -153,7 +153,7 @@ void Server::sendMessageToChannel(const std::string& channelName, const std::str
 			const std::string& user = *it;
 
 			// Récupérer le socket du client
-			int clientSocket = _client[searchClient(user)].getClientSocket(); //getClientSocketByUsername(user);
+			int clientSocket = _client[searchClient(user)].getClientSocket();
 
 			if (clientSocket != -1 && clientSocket != senderSocket) {
 				send(clientSocket, fullMessage.c_str(), fullMessage.size(), 0);
