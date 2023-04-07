@@ -50,7 +50,7 @@ int	Server::_checkClientStatus(Client& client, std::string clientEntry, int clie
 			client.setClientStatus(CONNECTED);
 			return (STOP);
 		}
-		else 
+		else
 		{
 			send(clientSocket, &BAD_PASSWORD, sizeof(BAD_PASSWORD), 0);
 			close(clientSocket);
@@ -94,7 +94,7 @@ int	Server::_isPwd_hexchat(std::string clientEntry)
 
 	if (line.compare(_serverPwd) == 0)
 		return (SUCCESS);
-	
+
 	return (FAILURE);
 }
 
