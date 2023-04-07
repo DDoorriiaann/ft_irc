@@ -118,6 +118,18 @@ Channel* Server::getChannel(const std::string& channelName) {
 		return NULL;
 }
 
+const std::string Server::getChannelListAsString(void) const
+{
+	std::string channelList;
+	std::map<std::string, Channel>::const_iterator it = _channels.begin();
+	while (it != _channels.end())
+	{
+		channelList.append(it->first);
+		it++;
+	}
+	return channelList;
+}
+
 const std::map<std::string, Channel>& Server::getChannels() const {
 	return _channels;
 }
