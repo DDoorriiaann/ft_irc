@@ -29,6 +29,7 @@
 
 #define HEADER_INFO						"[INFO]: "
 #define	HEADER_ERROR					"[ERROR]: "
+#define	HEADER_HXCHAT					"CAP LS 302"
 #define	MSG_CREATION_SUCCESS			"[INFO]: The server as been created succesfully ✅"
 #define	MSG_ENTER_PASSWORD				"[INFO]: Please enter the password.\n "
 #define	NEW_USER_MSG 					"[INFO]: New user on DG-Chat 🎉"
@@ -71,12 +72,16 @@ private:
 	void	_addUser(sockaddr_in& addrClient);
 	int		_resetFd(fd_set& read_fd_set);
 	void	_handelChatEntry(Client& client, int clientSocket);
+	void	_handleCmd(std::istringstream &iss, std::string &command, Client client, int clientSocket);
 	void	_checkNewEntries(fd_set read_fd_set);
 	int		_checkClientStatus(Client& client, std::string clientEntry, int clientSocket, int clientStatus);
 	int		_isPwd(std::string clientEntry);
 	int		_isPwd_hexchat(std::string clientEntry);
 	int 	_sendPrivateChat(std::istringstream& iss, Client& client, int clientSocket);
 	void	_nick(std::istringstream& iss, Client& client, int clientSocket);
+	void	_joinCmd(std::istringstream &iss, Client client, int clientSocket);
+	void	_handelSimpleChat(Client client, char buf[], int clientSocket, bool isHexChatCmd);
+	void	_unsetClient(Client &client);
 
 	std::string			_serverPwd;
 	int					_socketServer;

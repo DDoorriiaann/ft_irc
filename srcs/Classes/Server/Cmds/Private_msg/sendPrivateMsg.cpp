@@ -19,6 +19,7 @@ void	sendAllMsgToClient(std::istringstream& iss, int destSocket);
 int Server::_sendPrivateChat(std::istringstream& iss, Client& client, int clientSocket)
 {
 	std::string	destUserName;
+	std::string	message;
 	int			destClientIndex;
 	int			destSocket;
 	(void)client;
@@ -31,15 +32,13 @@ int Server::_sendPrivateChat(std::istringstream& iss, Client& client, int client
 		return (FAILURE);
 	}
 
-
 	destSocket = getClient(searchClient(destUserName)).getClientSocket();
-	send(destSocket, PRIVATE_CHAT_HEADER, sizeof(PRIVATE_CHAT_HEADER), 0);
-	send(destSocket, client.getClientUsername().c_str(), client.getClientUsername().length(), 0);
-	send(destSocket, ":", sizeof(":"), 0);
+	message += PRIVATE_CHAT_HEADER + client.getClientUsername() + ":";
+	
+	send(destSocket, message.c_str(), message.length(), 0);
 	sendAllMsgToClient(iss, destSocket);
-	send(destSocket, "\n> ", sizeof("\n> "), 0);
-
 	send(clientSocket, MSG_SENT_SUCCESS, sizeof(MSG_SENT_SUCCESS), 0);
+
 	return (SUCCESS);
 }
 
@@ -49,4 +48,5 @@ void	sendAllMsgToClient(std::istringstream& iss, int destSocket)
 
 	getline(iss, message);
 	send(destSocket, message.c_str(), message.length(), 0);
+	send(destSocket, "\n", sizeof("\n"), 0);
 }

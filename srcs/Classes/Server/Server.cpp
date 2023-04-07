@@ -176,3 +176,14 @@ int    Server::searchClient(std::string userName)
 	}
 	return (-1);
 }
+
+void	Server::_unsetClient(Client &client)
+{
+	std::string	clientUsername;
+	int	clientIndex;
+
+	clientUsername = client.getClientUsername();
+	clientIndex = searchClient(clientUsername);
+	_client.erase(_client.begin() + clientIndex);
+	return ;
+}
