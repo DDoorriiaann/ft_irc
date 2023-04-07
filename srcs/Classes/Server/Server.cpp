@@ -131,7 +131,7 @@ void Server::sendMessageToChannel(const std::string& channelName, const std::str
 		if (users.find(username) == users.end())
 		{
 			std::string errorMessage;
-			errorMessage.append(HEADER_ERROR).append("Message not sent because you are not member of the channel ").append(channelName).append("\n> ");
+			errorMessage.append(HEADER_ERROR).append("Message not sent because you are not member of the channel ").append(channelName).append("\n");
 			send(senderSocket, errorMessage.c_str(), errorMessage.size(), 0);
 			return;
 		}
@@ -177,7 +177,7 @@ int    Server::searchClient(std::string userName)
 	return (-1);
 }
 
-void	Server::_unsetClient(Client &client)
+void	Server::_unsetClient(Client& client)
 {
 	std::string	clientUsername;
 	int	clientIndex;
@@ -185,5 +185,5 @@ void	Server::_unsetClient(Client &client)
 	clientUsername = client.getClientUsername();
 	clientIndex = searchClient(clientUsername);
 	_client.erase(_client.begin() + clientIndex);
-	return ;
+	return;
 }
