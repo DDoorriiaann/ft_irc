@@ -18,7 +18,7 @@
 #define KICK_COMMAND "kick"
 #define	CMD_NOT_FOUND "[ERROR]: Command not found\n"
 #define	CHANNEL_NOT_FOUND "[ERROR]: Channel not found\n"
-#define	NO_CHANNEL_JOINED "No channel joined. Try /join #<channel>\n"
+#define	CHANNEL_LIST "No channel specified, active channels are : "
 #define CHANNEL_REQUIRES_HASHTAG "[ERROR]: A channel name must start with '#'\n"
 
 void	Server::run(void)
@@ -215,8 +215,9 @@ void	Server::_handelSimpleChat(Client client, char buf[], int clientSocket, bool
 	}
 	else
 	{
-		// ERROR MESSAGE (Only for NC client): "No channel joined. Try /join #<channel>\n"
-		send(clientSocket, &NO_CHANNEL_JOINED, sizeof(NO_CHANNEL_JOINED), 0);
+		std::string channelList = getChannelListAsString();
+		std::string message = CHANNEL_LIST + (channelList.empty() ? "No active channels at this time" : channelList) + "\n";
+		send(clientSocket, message.c_str(), message.length(), 0);
 		std::cout << client.getClientUsername() << ": " << buf << std::endl;
 	}
 	return;

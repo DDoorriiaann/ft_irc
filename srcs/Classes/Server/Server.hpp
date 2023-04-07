@@ -61,13 +61,14 @@ public:
 
 	//CHANNELS
 
-	bool createChannel(const std::string& name);
-	bool joinChannel(const std::string& channelName, const std::string& user);
-	bool leaveChannel(const std::string& channelName, const std::string& user);
-	const std::map<std::string, Channel>& getChannels() const;
-	bool isValidChannel(const std::string& channelName) const;
+	bool 	createChannel(const std::string& name);
+	bool 	joinChannel(const std::string& channelName, const std::string& user);
+	bool 	leaveChannel(const std::string& channelName, const std::string& user);
+	bool 	isValidChannel(const std::string& channelName) const;
 	Channel* getChannel(const std::string& channelName);
 	void 	sendMessageToChannel(const std::string& channelName, const std::string& username, const std::string& message);
+	const std::string getChannelListAsString(void) const;
+	const std::map<std::string, Channel>& getChannels() const;
 
 private:
 
