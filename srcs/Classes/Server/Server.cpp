@@ -78,14 +78,12 @@ bool Server::joinChannel(const std::string& channelName, const std::string& user
 
 		std::string message = "You've just created a new channel : " + channelName + "\n";
 		send(userSocket, message.c_str(), message.size(), 0);
-		send(userSocket, "> ", 2, 0);
 	}
 	else {
 		// Sinon, rejoindre la channel existante
 		it->second.join(user);
 		std::string message = "You're now member of the channel " + channelName + "\n";
 		send(userSocket, message.c_str(), message.size(), 0);
-		send(userSocket, "> ", 2, 0);
 	}
 
 	return true;
@@ -109,6 +107,16 @@ bool Server::leaveChannel(const std::string& channelName, const std::string& use
 	return false;
 }
 
+bool Server::isValidChannel(const std::string& channelName) const {
+	return  _channels.find(channelName) != _channels.end();
+}
+
+Channel* Server::getChannel(const std::string& channelName) {
+	if (isValidChannel(channelName))
+		return &(_channels.find(channelName)->second);
+	else
+		return NULL;
+}
 
 const std::map<std::string, Channel>& Server::getChannels() const {
 	return _channels;
@@ -137,7 +145,7 @@ void Server::sendMessageToChannel(const std::string& channelName, const std::str
 		}
 
 		// Construire le message complet à envoyer
-		std::string fullMessage = "\n[" + channelName + "] " + username + ": " + message + "\n> ";
+		std::string fullMessage = "\n[" + channelName + "] " + username + ": " + message + "\n";
 
 		//Envoyer le message à tous les utilisateurs de la channel
 		std::set<std::string>::const_iterator it;
@@ -151,12 +159,11 @@ void Server::sendMessageToChannel(const std::string& channelName, const std::str
 				send(clientSocket, fullMessage.c_str(), fullMessage.size(), 0);
 			}
 		}
-		send(senderSocket, "> ", 2, 0);
 	}
 	else {
 		// La channel spécifiée n'existe pas , renvoyer un message d'erreur//
 
-		std::string errorMessage = "channel not found\n> ";
+		std::string errorMessage = "channel not found\n";
 		send(senderSocket, errorMessage.c_str(), errorMessage.size(), 0);
 	}
 }

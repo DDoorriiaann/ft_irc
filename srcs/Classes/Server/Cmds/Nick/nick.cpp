@@ -14,7 +14,7 @@
 
 int		checkNoWhiteSpace(std::string str);
 
-void	Server::_nick(std::istringstream &iss, Client& client, int clientSocket)
+void	Server::_nick(std::istringstream& iss, Client& client, int clientSocket)
 {
 	std::string	nickName;
 	std::string message;
@@ -24,23 +24,23 @@ void	Server::_nick(std::istringstream &iss, Client& client, int clientSocket)
 	if (checkNoWhiteSpace(nickName) == FAILURE)
 	{
 		message += HEADER_ERROR;
-		message += "Nicknames with spaces are not allowed.\n> ";
+		message += "Nicknames with spaces are not allowed.\n";
 		send(clientSocket, message.c_str(), message.length(), 0);
-		return ;
+		return;
 	}
 	if (searchClient(nickName) != UNKNOWN)
 	{
 		message += HEADER_ERROR;
-		message += "\"" +  nickName + "\"" + " is already taken.\n> ";
+		message += "\"" + nickName + "\"" + " is already taken.\n";
 		send(clientSocket, message.c_str(), message.length(), 0);
-		return ;
+		return;
 	}
 
 	///// SUCCESS
 
 	client.setClientUsername(nickName);
 	message += HEADER_INFO;
-	message	+= "You are known now with the nick name: " + nickName + ".\n> ";
+	message += "You are known now with the nick name: " + nickName + ".\n";
 	send(clientSocket, message.c_str(), message.length(), 0);
-	return ;
+	return;
 }
