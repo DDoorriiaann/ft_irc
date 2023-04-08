@@ -90,6 +90,7 @@ private:
 	void	_unsetClient(Client& client);
 	void	_closeAllSocket(void);
 	int		_checkHaveFullEntry(Client &client, char buf[], int ret);
+	int		_checkNoWhiteSpace(std::string str);
 
 	std::string			_serverPwd;
 	int					_socketServer;

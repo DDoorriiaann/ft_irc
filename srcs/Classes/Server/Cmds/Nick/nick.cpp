@@ -12,8 +12,6 @@
 
 #include "../../Server.hpp"
 
-int		checkNoWhiteSpace(std::string str);
-
 void	Server::_nick(std::istringstream& iss, Client& client, int clientSocket)
 {
 	std::string	nickName;
@@ -21,7 +19,7 @@ void	Server::_nick(std::istringstream& iss, Client& client, int clientSocket)
 
 	getline(iss, nickName);
 	nickName = nickName.substr(1);
-	if (checkNoWhiteSpace(nickName) == FAILURE)
+	if (_checkNoWhiteSpace(nickName) == FAILURE)
 	{
 		message += HEADER_ERROR;
 		message += "Nicknames with spaces are not allowed.\n";
