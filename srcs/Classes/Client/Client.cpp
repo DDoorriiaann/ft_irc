@@ -26,6 +26,7 @@ Client & Client::operator=(Client const & rhs) //Canonical
 {
     if (this != &rhs)
     {
+		this->_userEntry = rhs._userEntry;
 		this->_username = rhs._username;
 		this->_nickName  = rhs._nickName;
 		this->_clientSocket = rhs._clientSocket;
@@ -91,4 +92,21 @@ std::string	Client::getFullName(void) const
 	if	(this->_nickName != "")
 		FullName += " (" + this->_nickName + ")";
 	return (FullName);
+}
+
+void	Client::appendUserEntry(std::string entry)
+{
+	_userEntry.append(entry);
+	return ;
+}
+
+std::string	Client::getUserEntry(void) const
+{
+	return (_userEntry);
+}
+
+void		Client::wipeUserEntry(void)
+{
+	_userEntry = "";
+	return ;
 }

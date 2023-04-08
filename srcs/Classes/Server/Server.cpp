@@ -206,3 +206,27 @@ void	Server::_unsetClient(Client& client)
 	_client.erase(_client.begin() + clientIndex);
 	return;
 }
+
+void	Server::_closeAllSocket(void)
+{
+	for (int i = 0; i < _nbrClient; i++)
+		close(getClient(i).getClientSocket());
+	close(_socketServer);
+	return ;
+}
+
+int	Server::_checkHaveFullEntry(Client &client, char buf[], int ret)
+{
+	unsigned long found;
+
+	buf[ret] = '\0';
+	client.appendUserEntry(buf);
+	found = std::string(buf).find("\n", 0);
+	if (found != std::string::npos)
+	{
+		std::cout << "SUCCESS: " << client.getUserEntry() << std::endl;
+		return (SUCCESS);
+	}
+	std::cout << "FAIL: " << client.getUserEntry() << std::endl;
+	return (FAILURE);
+}
