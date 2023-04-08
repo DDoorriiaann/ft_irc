@@ -3,10 +3,12 @@
 
 #include "../Client/Client.hpp"
 #include "../Channel/Channel.hpp"
+#include "../Bot/Bot.hpp"
 #include <iostream>
 #include <string>
 #include <netinet/in.h>
 #include <stdlib.h>
+#include <ctime>
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -70,6 +72,10 @@ public:
 	const std::string getChannelListAsString(void) const;
 	const std::map<std::string, Channel>& getChannels() const;
 
+	//BOT
+	void 	startBot();
+	void 	stopBot();
+
 private:
 
 	void	_addUser(sockaddr_in& addrClient);
@@ -81,6 +87,7 @@ private:
 	int		_isPwd(std::string clientEntry);
 	int		_isPwd_hexchat(std::string clientEntry);
 	int 	_sendPrivateChat(std::istringstream& iss, Client& client, int clientSocket);
+	void	_bot(std::istringstream& iss, int clientSocket);
 	void	_nick(std::istringstream& iss, Client& client, int clientSocket);
 	void	_kick(std::istringstream& iss, Client& client, int clientSocket);
 	void	_mode(std::istringstream& iss, Client& client, int clientSocket);
@@ -98,6 +105,7 @@ private:
 	int					_nbrClient;
 	std::vector<Client>	_client;
 	std::map<std::string, Channel> _channels;
+	Bot* _theBot;
 };
 
 #endif 

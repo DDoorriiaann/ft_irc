@@ -19,6 +19,7 @@
 #define KICK_COMMAND "KICK"
 #define MODE_COMMAND "MODE"
 #define PART_COMMAND "PART"
+#define BOT_COMMAND "BOT"
 #define QUIT_COMMAND_HEXCHAT "QUIT"
 #define	CMD_NOT_FOUND "[ERROR]: Command not found\n"
 #define	CHANNEL_NOT_FOUND "[ERROR]: Channel not found\n"
@@ -200,6 +201,10 @@ void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client& c
 	else if (command == MODE_COMMAND)
 	{
 		_mode(iss, client, clientSocket);
+	}
+	else if (command == BOT_COMMAND)
+	{
+		_bot(iss, clientSocket);
 	}
 	else
 	{

@@ -2,19 +2,27 @@
 
 Server::Server(void) //Canonical
 {
-	std::cout << "Server Constructeur called." << std::endl;
+	std::cout << "Server Constructor called." << std::endl;
+	_theBot = NULL;
 	return;
 }
 
 Server::Server(Server const& copy) //Canonical
 {
-	std::cout << "Server Constructeur called." << std::endl;
+	std::cout << "Server Constructor called." << std::endl;
 	*this = copy;
 }
 
 Server::~Server() //Canonical
 {
-	std::cout << "Server Destructeur called." << std::endl;
+	std::cout << "Server Destructor called." << std::endl;
+	if (_theBot != NULL)
+	{
+		_theBot->stop();
+		_theBot->join();
+		delete _theBot;
+	}
+
 	return;
 }
 
@@ -192,6 +200,29 @@ void Server::sendMessageToChannel(const std::string& channelName, const std::str
 		send(senderSocket, errorMessage.c_str(), errorMessage.size(), 0);
 	}
 }
+
+////////////// BOT //////////////
+
+void	Server::startBot()
+{
+	srand(time(0));
+	if (_theBot)
+		stopBot();
+	_theBot = new Bot;
+	_theBot->start();
+}
+
+void	Server::stopBot()
+{
+	if (_theBot)
+	{
+		_theBot->stop();
+		_theBot->join();
+		delete _theBot;
+		_theBot = NULL;
+	}
+}
+
 
 //////////////// Function //////////////
 int    Server::searchClient(std::string userName)
