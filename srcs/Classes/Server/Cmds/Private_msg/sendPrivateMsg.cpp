@@ -15,7 +15,7 @@
 #define ERROR_EMPTY_MSG "[ERROR]: Empty private chat.\n"
 #define ERROR_UNKNOWN_CLIENT "[ERROR]: This user doesn't exit.\n"
 
-void	sendAllMsgToClient(std::istringstream& iss, Client client, int destSocket, int clientSocket);
+void	sendAllMsgToClient(std::istringstream& iss, Client &client, int destSocket, int clientSocket);
 
 int Server::_sendPrivateChat(std::istringstream& iss, Client& client, int clientSocket)
 {
@@ -39,7 +39,7 @@ int Server::_sendPrivateChat(std::istringstream& iss, Client& client, int client
 	return (SUCCESS);
 }
 
-void	sendAllMsgToClient(std::istringstream& iss, Client client, int destSocket, int clientSocket)
+void	sendAllMsgToClient(std::istringstream& iss, Client &client, int destSocket, int clientSocket)
 {
 	std::string	header;
 	std::string message;
@@ -50,11 +50,10 @@ void	sendAllMsgToClient(std::istringstream& iss, Client client, int destSocket, 
 		send(clientSocket, ERROR_EMPTY_MSG, sizeof(ERROR_EMPTY_MSG), 0);
 		return ;
 	}
-
-	header += PRIVATE_CHAT_HEADER + client.getClientUsername() + ":" + message;
+	//std::cout << "Sender's nickname : \n" << client.getClientNickName() << std::endl << std::endl;
+	header += PRIVATE_CHAT_HEADER + client.getFullName() + ":" + message + "\n";
 	
 	send(destSocket, header.c_str(), header.length(), 0);
-	send(destSocket, "\n", sizeof("\n"), 0);
 	send(clientSocket, MSG_SENT_SUCCESS, sizeof(MSG_SENT_SUCCESS), 0);
 	return ;
 } 	

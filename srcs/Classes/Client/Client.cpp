@@ -8,6 +8,7 @@ Client::Client(void) //Canonical
 Client::Client(std::string name)
 {
 	this->_username = name;
+	this->_nickName = "";
 	this->_clientStatus = 0;
 }
 
@@ -26,6 +27,7 @@ Client & Client::operator=(Client const & rhs) //Canonical
     if (this != &rhs)
     {
 		this->_username = rhs._username;
+		this->_nickName  = rhs._nickName;
 		this->_clientSocket = rhs._clientSocket;
 		this->_clientStatus = rhs._clientStatus;
 	}
@@ -52,11 +54,22 @@ void	Client::setClientStatus(int status)
 	return ;
 }
 
+void	Client::setNickName(std::string nickName)
+{
+	this->_nickName = nickName;
+	return ;
+}
+
 //////////////// GET ////////////////
 
 std::string	Client::getClientUsername(void) const
 {
 	return (this->_username);
+}
+
+std::string	Client::getClientNickName(void) const
+{
+	return (this->_nickName);
 }
 
 
@@ -68,4 +81,14 @@ int		Client::getClientSocket(void) const
 int			Client::getClientStatus(void) const
 {
 	return (this->_clientStatus);
+}
+
+std::string	Client::getFullName(void) const
+{
+	std::string	FullName;
+
+	FullName += this->_username;
+	if	(this->_nickName != "")
+		FullName += " (" + this->_nickName + ")";
+	return (FullName);
 }
