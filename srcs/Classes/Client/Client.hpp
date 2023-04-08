@@ -21,15 +21,19 @@ class Client
 		std::string	getClientUsername(void) const;
 		std::string	getClientNickName(void) const;
 		std::string	getFullName(void) const;
+		std::string	getUserEntry(void) const;
 
 		void		setClientSocket(int socket);
 		void		setClientUsername(std::string username);
 		void		setClientStatus(int status);
 		void		setNickName(std::string nickName);
 
+		void		appendUserEntry(std::string entry);
+		void		wipeUserEntry(void);
+		
 	private:
 
-
+		std::string	_userEntry;
 		std::string	_username;
 		std::string	_nickName;
 		int			_clientSocket;

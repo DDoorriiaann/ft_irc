@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "Server.hpp"
+#include <signal.h>
 
 #define	IS_CMD '/'
 #define	JOIN_COMMAND "join"
@@ -22,13 +23,26 @@
 #define	CHANNEL_LIST "No channel specified, active channels are : "
 #define CHANNEL_REQUIRES_HASHTAG "[ERROR]: A channel name must start with '#'\n"
 
+bool	QUIT_SERVER = false;
+
+void	catchSignal(int sig)
+{
+	if (sig == SIGINT)
+	{
+		QUIT_SERVER = true;
+		return ;
+	}
+	return ;
+}
+
 void	Server::run(void)
 {
 	struct		sockaddr_in	addrClient;
 	fd_set					read_fd_set;
 	int						lastFd;
 
-	while (1)
+	signal(SIGINT, catchSignal);
+	while (QUIT_SERVER == false)
 	{
 		lastFd = _resetFd(read_fd_set);
 		if (select(lastFd + 1, &read_fd_set, NULL, NULL, NULL) > 0)
@@ -40,6 +54,8 @@ void	Server::run(void)
 			_checkNewEntries(read_fd_set);
 		}
 	}
+	std::cout << "\n Server shutdown." << std::endl;
+	_closeAllSocket();
 	return;
 }
 
@@ -85,6 +101,7 @@ void	Server::_checkNewEntries(fd_set read_fd_set)
 
 void	Server::_handelChatEntry(Client& client, int clientSocket)
 {
+	std::string userEntry;
 	std::string header;
 	std::string command;
 	int			ret;
@@ -99,13 +116,17 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 		_nbrClient--;
 		return;
 	}
-	buf[ret - 1] = '\0';
-	std::cout << "Client sends : \n" << buf << std::endl << std::endl; // !DEBUG
-	if (_checkClientStatus(client, buf, clientSocket, client.getClientStatus()) == STOP)
+	if (_checkHaveFullEntry(client, buf, ret) == FAILURE)
+		return ;
+	userEntry = client.getUserEntry();
+	userEntry = userEntry.substr(0, userEntry.length() - 1);
+	client.wipeUserEntry();
+	std::cout << "Client sends : \"" << userEntry << "\"" << std::endl << std::endl; // !DEBUG
+	if (_checkClientStatus(client, userEntry, clientSocket, client.getClientStatus()) == STOP)
 		return;
 
 	// Vérifier si le message provient d'une commande HexChat:
-	std::string 		message(buf);
+	std::string 		message(userEntry);
 	std::istringstream	iss(message);
 
 	iss >> header;
@@ -138,7 +159,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	{
 		// Traiter le message en tant que message de chat normal
 		std::cout << "Simple message detected." << std::endl; // !DEBUG
-		_handelSimpleChat(client, buf, clientSocket);
+		_handelSimpleChat(client, userEntry, clientSocket, isHexChatCmd);
 	}
 }
 
@@ -204,9 +225,9 @@ void	Server::_joinCmd(std::istringstream& iss, Client client, int clientSocket)
 ///////////////	HANDLE SIMPLE CHAT
 //////////////////////////////////
 
-void	Server::_handelSimpleChat(Client client, char buf[], int clientSocket)
+void	Server::_handelSimpleChat(Client client, std::string userEntry, int clientSocket, bool isHexChatCmd)
 {
-	std::string 		message(buf);
+	std::string 		message(userEntry);
 	std::string			channelIndicator;
 	std::istringstream	iss(message);
 
@@ -229,7 +250,7 @@ void	Server::_handelSimpleChat(Client client, char buf[], int clientSocket)
 		std::string channelList = getChannelListAsString();
 		std::string message = CHANNEL_LIST + (channelList.empty() ? "No active channels at this time" : channelList) + "\n";
 		send(clientSocket, message.c_str(), message.length(), 0);
-		std::cout << client.getClientUsername() << ": " << buf << std::endl;
+		std::cout << client.getClientUsername() << ": " << userEntry << std::endl;
 	}
 	return;
 }
