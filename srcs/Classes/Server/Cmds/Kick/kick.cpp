@@ -64,8 +64,4 @@ void	Server::_kick(std::istringstream& iss, Client& client, int clientSocket)
 
 	message = "[INFO]: User nammed " + userToKick + " has been kicked from channel " + channelName + "\n";
 	send(clientSocket, message.c_str(), message.length(), 0);
-
-
-	// si le stream contient une raison on envoie la raison à l'utilisateur qui se fait kick
-
 }

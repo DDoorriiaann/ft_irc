@@ -56,8 +56,10 @@ void Channel::join(const std::string& user) {
 	_users.insert(user);
 }
 
-void Channel::leave(const std::string& user) {
+void Channel::leave(const std::string& user, const bool isOperator) {
 	_users.erase(user);
+	if (isOperator)
+		_operators.erase(user);
 }
 
 bool Channel::hasUser(const std::string& user) const {

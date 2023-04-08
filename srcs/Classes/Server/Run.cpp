@@ -13,10 +13,11 @@
 #include <signal.h>
 
 #define	IS_CMD '/'
-#define	JOIN_COMMAND "join"
-#define	MSG_COMMAND "msg"
-#define	NICK_COMMAND "nick"
-#define KICK_COMMAND "kick"
+#define	JOIN_COMMAND "JOIN"
+#define	MSG_COMMAND "MSG"
+#define	NICK_COMMAND "NICK"
+#define KICK_COMMAND "KICK"
+#define PART_COMMAND "PART"
 #define QUIT_COMMAND_HEXCHAT "QUIT"
 #define	CMD_NOT_FOUND "[ERROR]: Command not found\n"
 #define	CHANNEL_NOT_FOUND "[ERROR]: Channel not found\n"
@@ -190,6 +191,10 @@ void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client& c
 	else if (command == KICK_COMMAND)
 	{
 		_kick(iss, client, clientSocket);
+	}
+	else if (command == PART_COMMAND)
+	{
+		_part(iss, client, clientSocket);
 	}
 	else
 	{

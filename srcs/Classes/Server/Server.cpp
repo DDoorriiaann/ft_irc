@@ -89,15 +89,30 @@ bool Server::joinChannel(const std::string& channelName, const std::string& user
 	return true;
 }
 
+void Server::kickAllUsers(Channel& channel)
+{
+	std::set<std::string>::iterator user = channel.getUsers().begin();
+	while (user != channel.getUsers().end())
+	{
+		channel.kickUser(*user);
+		std::string message = "[INFO]: You (" + *user + ") have been kicked from channel " + channel.getName() + "because this channel was closed by its last operator\n";
+		send(getClient(searchClient(*user)).getClientSocket(), message.c_str(), message.length(), 0);
+		user++;
+	}
+}
+
 bool Server::leaveChannel(const std::string& channelName, const std::string& user) {
 	std::map<std::string, Channel>::iterator it = _channels.find(channelName);
 
 	if (it != _channels.end()) {
 		bool isOperator = it->second.isOperator(user);
-		it->second.leave(user);
+		std::cout << "operator count before leaving :" << it->second.operatorCount() << std::endl;
+		it->second.leave(user, isOperator);
+		std::cout << "operator count after leaving :" << it->second.operatorCount() << std::endl;
 
 		if (isOperator && it->second.operatorCount() == 0) {
-			// Si l'utilisateur est le dernier opérateur, supprimer la channel
+			// Si l'utilisateur est le dernier opérateur, supprimer la channel et kick tous les users
+			kickAllUsers(it->second);
 			_channels.erase(it);
 		}
 		return true;

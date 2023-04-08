@@ -18,7 +18,7 @@ public:
 
 	const std::string& getName() const;
 	void join(const std::string& user);
-	void leave(const std::string& user);
+	void leave(const std::string& user, const bool isOperator);
 	bool hasUser(const std::string& user) const;
 	void setOperator(const std::string& user);
 	bool isOperator(const std::string& user) const;
