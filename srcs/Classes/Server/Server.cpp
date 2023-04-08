@@ -149,7 +149,7 @@ const std::map<std::string, Channel>& Server::getChannels() const {
 
 ////// SEND MESSAGES /////////
 
-void Server::sendMessageToChannel(const std::string& channelName, const std::string& username, const std::string& message) {
+void Server::sendMessageToChannel(const std::string& channelName, const std::string& username, const std::string& fullName, const std::string& message) {
 	// Rechercher la channel spécifiée
 	std::map<std::string, Channel>::iterator it = _channels.find(channelName);
 	int senderSocket = _client[searchClient(username)].getClientSocket();
@@ -170,7 +170,7 @@ void Server::sendMessageToChannel(const std::string& channelName, const std::str
 		}
 
 		// Construire le message complet à envoyer
-		std::string fullMessage = "[" + channelName + "] " + username + ": " + message + "\n";
+		std::string fullMessage = "[" + channelName + "] " + fullName + ": " + message + "\n";
 
 		//Envoyer le message à tous les utilisateurs de la channel
 		std::set<std::string>::const_iterator it;
@@ -180,9 +180,9 @@ void Server::sendMessageToChannel(const std::string& channelName, const std::str
 			// Récupérer le socket du client
 			int clientSocket = _client[searchClient(user)].getClientSocket();
 
-			if (clientSocket != -1) {
+
+			if (clientSocket != -1)
 				send(clientSocket, fullMessage.c_str(), fullMessage.size(), 0);
-			}
 		}
 	}
 	else {

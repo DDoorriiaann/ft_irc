@@ -2,7 +2,7 @@
 
 Client::Client(void) //Canonical
 {
-	return ;
+	return;
 }
 
 Client::Client(std::string name)
@@ -12,27 +12,27 @@ Client::Client(std::string name)
 	this->_clientStatus = 0;
 }
 
-Client::Client(Client const & copy) //Canonical
+Client::Client(Client const& copy) //Canonical
 {
-    *this = copy;
+	*this = copy;
 }
 
 Client::~Client() //Canonical
 {
-	return ;
+	return;
 }
 
-Client & Client::operator=(Client const & rhs) //Canonical
+Client& Client::operator=(Client const& rhs) //Canonical
 {
-    if (this != &rhs)
-    {
+	if (this != &rhs)
+	{
 		this->_userEntry = rhs._userEntry;
 		this->_username = rhs._username;
-		this->_nickName  = rhs._nickName;
+		this->_nickName = rhs._nickName;
 		this->_clientSocket = rhs._clientSocket;
 		this->_clientStatus = rhs._clientStatus;
 	}
-    return *this;
+	return *this;
 }
 
 //////////////// SET ////////////////
@@ -40,25 +40,25 @@ Client & Client::operator=(Client const & rhs) //Canonical
 void	Client::setClientSocket(int socket)
 {
 	this->_clientSocket = socket;
-	return ;
+	return;
 }
 
 void	Client::setClientUsername(std::string username)
 {
 	this->_username = username;
-	return ;
+	return;
 }
 
 void	Client::setClientStatus(int status)
 {
 	this->_clientStatus = status;
-	return ;
+	return;
 }
 
 void	Client::setNickName(std::string nickName)
 {
 	this->_nickName = nickName;
-	return ;
+	return;
 }
 
 //////////////// GET ////////////////
@@ -88,16 +88,17 @@ std::string	Client::getFullName(void) const
 {
 	std::string	FullName;
 
-	FullName += this->_username;
-	if	(this->_nickName != "")
+	FullName = this->_username;
+	if (this->_nickName != "")
 		FullName += " (" + this->_nickName + ")";
+	std::cout << "FullName: " << FullName << std::endl; // !DEBUG
 	return (FullName);
 }
 
 void	Client::appendUserEntry(std::string entry)
 {
 	_userEntry.append(entry);
-	return ;
+	return;
 }
 
 std::string	Client::getUserEntry(void) const
@@ -108,5 +109,5 @@ std::string	Client::getUserEntry(void) const
 void		Client::wipeUserEntry(void)
 {
 	_userEntry = "";
-	return ;
+	return;
 }

@@ -66,7 +66,7 @@ public:
 	bool 	leaveChannel(const std::string& channelName, const std::string& user);
 	bool 	isValidChannel(const std::string& channelName) const;
 	Channel* getChannel(const std::string& channelName);
-	void 	sendMessageToChannel(const std::string& channelName, const std::string& username, const std::string& message);
+	void 	sendMessageToChannel(const std::string& channelName, const std::string& username, const std::string& fullName, const std::string& message);
 	const std::string getChannelListAsString(void) const;
 	const std::map<std::string, Channel>& getChannels() const;
 
