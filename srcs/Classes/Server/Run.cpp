@@ -148,7 +148,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 ///////////////	HANDLE CMD 
 //////////////////////////////////
 
-void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client client, int clientSocket)
+void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client &client, int clientSocket)
 {
 	std::cout << " \'/\' detected" << std::endl; // !DEBUG
 

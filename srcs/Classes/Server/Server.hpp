@@ -75,7 +75,7 @@ private:
 	void	_addUser(sockaddr_in& addrClient);
 	int		_resetFd(fd_set& read_fd_set);
 	void	_handelChatEntry(Client& client, int clientSocket);
-	void	_handleCmd(std::istringstream& iss, std::string& command, Client client, int clientSocket);
+	void	_handleCmd(std::istringstream& iss, std::string& command, Client &client, int clientSocket);
 	void	_checkNewEntries(fd_set read_fd_set);
 	int		_checkClientStatus(Client& client, std::string clientEntry, int clientSocket, int clientStatus);
 	int		_isPwd(std::string clientEntry);

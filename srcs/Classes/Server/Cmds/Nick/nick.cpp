@@ -28,19 +28,12 @@ void	Server::_nick(std::istringstream& iss, Client& client, int clientSocket)
 		send(clientSocket, message.c_str(), message.length(), 0);
 		return;
 	}
-	if (searchClient(nickName) != UNKNOWN)
-	{
-		message += HEADER_ERROR;
-		message += "\"" + nickName + "\"" + " is already taken.\n";
-		send(clientSocket, message.c_str(), message.length(), 0);
-		return;
-	}
 
 	///// SUCCESS
 
-	client.setClientUsername(nickName);
+	client.setNickName(nickName);
 	message += HEADER_INFO;
-	message += "You are known now with the nick name: " + nickName + ".\n";
+	message += "You are known now with the nick name: " + client.getFullName() + ".\n";
 	send(clientSocket, message.c_str(), message.length(), 0);
 	return;
 }
