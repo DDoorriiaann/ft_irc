@@ -89,13 +89,13 @@ bool Server::joinChannel(const std::string& channelName, const std::string& user
 	return true;
 }
 
-void Server::kickAllUsers(Channel& channel)
+void Server::_kickAllUsers(Channel& channel)
 {
 	std::set<std::string>::iterator user = channel.getUsers().begin();
 	while (user != channel.getUsers().end())
 	{
 		channel.kickUser(*user);
-		std::string message = "[INFO]: You (" + *user + ") have been kicked from channel " + channel.getName() + "because this channel was closed by its last operator\n";
+		std::string message = "[INFO]: You (" + *user + ") have been kicked from channel " + channel.getName() + " because this channel was closed by its last operator\n";
 		send(getClient(searchClient(*user)).getClientSocket(), message.c_str(), message.length(), 0);
 		user++;
 	}
@@ -112,7 +112,7 @@ bool Server::leaveChannel(const std::string& channelName, const std::string& use
 
 		if (isOperator && it->second.operatorCount() == 0) {
 			// Si l'utilisateur est le dernier opérateur, supprimer la channel et kick tous les users
-			kickAllUsers(it->second);
+			_kickAllUsers(it->second);
 			_channels.erase(it);
 		}
 		return true;
@@ -180,7 +180,7 @@ void Server::sendMessageToChannel(const std::string& channelName, const std::str
 			// Récupérer le socket du client
 			int clientSocket = _client[searchClient(user)].getClientSocket();
 
-			if (clientSocket != -1 && clientSocket != senderSocket) {
+			if (clientSocket != -1) {
 				send(clientSocket, fullMessage.c_str(), fullMessage.size(), 0);
 			}
 		}
@@ -225,10 +225,10 @@ void	Server::_closeAllSocket(void)
 	for (int i = 0; i < _nbrClient; i++)
 		close(getClient(i).getClientSocket());
 	close(_socketServer);
-	return ;
+	return;
 }
 
-int	Server::_checkHaveFullEntry(Client &client, char buf[], int ret)
+int	Server::_checkHaveFullEntry(Client& client, char buf[], int ret)
 {
 	unsigned long found;
 

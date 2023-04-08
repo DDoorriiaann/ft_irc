@@ -17,6 +17,7 @@
 #define	MSG_COMMAND "MSG"
 #define	NICK_COMMAND "NICK"
 #define KICK_COMMAND "KICK"
+#define MODE_COMMAND "MODE"
 #define PART_COMMAND "PART"
 #define QUIT_COMMAND_HEXCHAT "QUIT"
 #define	CMD_NOT_FOUND "[ERROR]: Command not found\n"
@@ -31,9 +32,9 @@ void	catchSignal(int sig)
 	if (sig == SIGINT)
 	{
 		QUIT_SERVER = true;
-		return ;
+		return;
 	}
-	return ;
+	return;
 }
 
 void	Server::run(void)
@@ -118,7 +119,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 		return;
 	}
 	if (_checkHaveFullEntry(client, buf, ret) == FAILURE)
-		return ;
+		return;
 	userEntry = client.getUserEntry();
 	userEntry = userEntry.substr(0, userEntry.length() - 1);
 	client.wipeUserEntry();
@@ -195,6 +196,10 @@ void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client& c
 	else if (command == PART_COMMAND)
 	{
 		_part(iss, client, clientSocket);
+	}
+	else if (command == MODE_COMMAND)
+	{
+		_mode(iss, client, clientSocket);
 	}
 	else
 	{

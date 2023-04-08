@@ -76,6 +76,10 @@ void Channel::setOperator(const std::string& user) {
 	_operators.insert(user);
 }
 
+void Channel::unsetOperator(const std::string& user) {
+	_operators.erase(user);
+}
+
 bool Channel::isOperator(const std::string& user) const {
 	return _operators.find(user) != _operators.end();
 }

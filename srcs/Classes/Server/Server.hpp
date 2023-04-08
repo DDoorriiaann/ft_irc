@@ -83,13 +83,14 @@ private:
 	int 	_sendPrivateChat(std::istringstream& iss, Client& client, int clientSocket);
 	void	_nick(std::istringstream& iss, Client& client, int clientSocket);
 	void	_kick(std::istringstream& iss, Client& client, int clientSocket);
-	void	kickAllUsers(Channel& channel);
+	void	_mode(std::istringstream& iss, Client& client, int clientSocket);
+	void	_kickAllUsers(Channel& channel);
 	void	_part(std::istringstream& iss, Client& client, int clientSocket);
 	void	_joinCmd(std::istringstream& iss, Client client, int clientSocket);
 	void	_handelSimpleChat(Client client, std::string userEntry, int clientSocket);
 	void	_unsetClient(Client& client);
 	void	_closeAllSocket(void);
-	int		_checkHaveFullEntry(Client &client, char buf[], int ret);
+	int		_checkHaveFullEntry(Client& client, char buf[], int ret);
 	int		_checkNoWhiteSpace(std::string str);
 
 	std::string			_serverPwd;
