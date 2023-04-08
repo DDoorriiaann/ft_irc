@@ -13,6 +13,8 @@
 
 #define BAD_PASSWORD 			"Bad password.\n"
 #define USERNAME_ALREADY_SET 	"[ERROR] Username already set.\n"
+#define SPACE_IN_USERNAME 		"[ERROR] Space in username.\n"
+#define EMPTY_USERNAME 			"[ERROR] Empty username.\n"
 #define	DISCONNECT				"[INFO] DISCONNECT.\n"
 
 int	Server::_checkClientStatus(Client& client, std::string clientEntry, int clientSocket, int clientStatus)
@@ -47,6 +49,24 @@ int	Server::_checkClientStatus(Client& client, std::string clientEntry, int clie
 
 			usernameStream >> parsedUsername;
 			usernameStream >> parsedUsername;
+			if (clientEntry.empty())
+			{
+				send(clientSocket, &EMPTY_USERNAME, sizeof(EMPTY_USERNAME), 0);
+				send(clientSocket, &MSG_ENTER_USRNM, sizeof(MSG_ENTER_USRNM), 0);
+				close(clientSocket);
+				_unsetClient(client);
+				_nbrClient--;
+				return (STOP);
+			}
+			if (_checkNoWhiteSpace(clientEntry) == FAILURE)
+			{
+				send(clientSocket, &SPACE_IN_USERNAME, sizeof(SPACE_IN_USERNAME), 0);
+				send(clientSocket, &MSG_ENTER_USRNM, sizeof(MSG_ENTER_USRNM), 0);
+				close(clientSocket);
+				_unsetClient(client);
+				_nbrClient--;
+				return (STOP);
+			}
 			if (searchClient(parsedUsername) != -1)
 			{
 				send(clientSocket, &USERNAME_ALREADY_SET, sizeof(USERNAME_ALREADY_SET), 0);
@@ -83,6 +103,18 @@ int	Server::_checkClientStatus(Client& client, std::string clientEntry, int clie
 	}
 	else
 	{
+		if (clientEntry.empty())
+		{
+			send(clientSocket, &EMPTY_USERNAME, sizeof(EMPTY_USERNAME), 0);
+			send(clientSocket, &MSG_ENTER_USRNM, sizeof(MSG_ENTER_USRNM), 0);
+			return (STOP);
+		}
+		if (_checkNoWhiteSpace(clientEntry) == FAILURE)
+		{
+			send(clientSocket, &SPACE_IN_USERNAME, sizeof(SPACE_IN_USERNAME), 0);
+			send(clientSocket, &MSG_ENTER_USRNM, sizeof(MSG_ENTER_USRNM), 0);
+			return (STOP);
+		}
 		if (searchClient(clientEntry) != -1)
 		{
 			send(clientSocket, &USERNAME_ALREADY_SET, sizeof(USERNAME_ALREADY_SET), 0);

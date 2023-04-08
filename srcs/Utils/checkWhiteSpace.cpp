@@ -12,7 +12,7 @@
 
 #include "../Classes/Server/Server.hpp"
 
-int	checkNoWhiteSpace(std::string str)
+int	Server::_checkNoWhiteSpace(std::string str)
 {
 	for(int i = 0; str[i] != '\0'; i++)
 		if (isspace(str[i]))
