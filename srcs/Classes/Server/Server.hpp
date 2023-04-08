@@ -86,7 +86,7 @@ private:
 	void	kickAllUsers(Channel& channel);
 	void	_part(std::istringstream& iss, Client& client, int clientSocket);
 	void	_joinCmd(std::istringstream& iss, Client client, int clientSocket);
-	void	_handelSimpleChat(Client client, std::string userEntry, int clientSocket, bool isHexChatCmd);
+	void	_handelSimpleChat(Client client, std::string userEntry, int clientSocket);
 	void	_unsetClient(Client& client);
 	void	_closeAllSocket(void);
 	int		_checkHaveFullEntry(Client &client, char buf[], int ret);

@@ -160,7 +160,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	{
 		// Traiter le message en tant que message de chat normal
 		std::cout << "Simple message detected." << std::endl; // !DEBUG
-		_handelSimpleChat(client, userEntry, clientSocket, isHexChatCmd);
+		_handelSimpleChat(client, userEntry, clientSocket);
 	}
 }
 
@@ -230,7 +230,7 @@ void	Server::_joinCmd(std::istringstream& iss, Client client, int clientSocket)
 ///////////////	HANDLE SIMPLE CHAT
 //////////////////////////////////
 
-void	Server::_handelSimpleChat(Client client, std::string userEntry, int clientSocket, bool isHexChatCmd)
+void	Server::_handelSimpleChat(Client client, std::string userEntry, int clientSocket)
 {
 	std::string 		message(userEntry);
 	std::string			channelIndicator;
