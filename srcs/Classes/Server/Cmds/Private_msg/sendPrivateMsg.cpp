@@ -11,11 +11,11 @@
 /* ************************************************************************** */
 #include "../../Server.hpp"
 
-#define	PRIVATE_CHAT_HEADER "[PRIVATE CHAT] "
+#define	PRIVATE_CHAT_HEADER "[PRIVATE CHAT] from "
 #define ERROR_EMPTY_MSG "[ERROR]: Empty private chat.\n"
 #define ERROR_UNKNOWN_CLIENT "[ERROR]: This user doesn't exit.\n"
 
-void	sendAllMsgToClient(std::istringstream& iss, Client &client, int destSocket, int clientSocket);
+void	sendAllMsgToClient(std::istringstream& iss, Client& client, int destSocket, int clientSocket, std::string destUserName);
 
 int Server::_sendPrivateChat(std::istringstream& iss, Client& client, int clientSocket)
 {
@@ -34,26 +34,35 @@ int Server::_sendPrivateChat(std::istringstream& iss, Client& client, int client
 	}
 
 	destSocket = getClient(searchClient(destUserName)).getClientSocket();
-	sendAllMsgToClient(iss, client, destSocket, clientSocket);
+	sendAllMsgToClient(iss, client, destSocket, clientSocket, destUserName);
 
 	return (SUCCESS);
 }
 
-void	sendAllMsgToClient(std::istringstream& iss, Client &client, int destSocket, int clientSocket)
+void	sendAllMsgToClient(std::istringstream& iss, Client& client, int destSocket, int clientSocket, std::string destUserName)
 {
-	std::string	header;
-	std::string message;
+	std::string	message;
+	std::string content;
 
-	getline(iss, message);
-	if (message.empty())
+	getline(iss, content);
+	if (content.empty())
 	{
 		send(clientSocket, ERROR_EMPTY_MSG, sizeof(ERROR_EMPTY_MSG), 0);
-		return ;
+		return;
 	}
-	//std::cout << "Sender's nickname : \n" << client.getClientNickName() << std::endl << std::endl;
-	header += PRIVATE_CHAT_HEADER + client.getFullName() + ":" + message + "\n";
-	
-	send(destSocket, header.c_str(), header.length(), 0);
-	send(clientSocket, MSG_SENT_SUCCESS, sizeof(MSG_SENT_SUCCESS), 0);
-	return ;
-} 	
+	message = PRIVATE_CHAT_HEADER + client.getFullName() + " to " + destUserName + " :" + content + "\n";
+
+	if (clientSocket != destSocket)
+	{
+		message = PRIVATE_CHAT_HEADER + client.getFullName() + " to you :" + content + "\n";
+		send(destSocket, message.c_str(), message.length(), 0);
+		message = (std::string)PRIVATE_CHAT_HEADER + "you to " + destUserName + " :" + content + "\n";
+		send(clientSocket, message.c_str(), message.length(), 0);
+	}
+	else
+	{
+		message = (std::string)PRIVATE_CHAT_HEADER + "you to yourself :" + content + "\n";
+		send(clientSocket, message.c_str(), message.length(), 0);
+	}
+	return;
+}

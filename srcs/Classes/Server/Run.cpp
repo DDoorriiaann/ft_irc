@@ -31,9 +31,9 @@ void	catchSignal(int sig)
 	if (sig == SIGINT)
 	{
 		QUIT_SERVER = true;
-		return ;
+		return;
 	}
-	return ;
+	return;
 }
 
 void	Server::run(void)
@@ -118,7 +118,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 		return;
 	}
 	if (_checkHaveFullEntry(client, buf, ret) == FAILURE)
-		return ;
+		return;
 	userEntry = client.getUserEntry();
 	userEntry = userEntry.substr(0, userEntry.length() - 1);
 	client.wipeUserEntry();
@@ -248,14 +248,14 @@ void	Server::_handelSimpleChat(Client client, std::string userEntry, int clientS
 		std::getline(iss, messageToSend);
 
 		// Envoyer le message à la channel spécifique
-		sendMessageToChannel(channelName, client.getClientUsername(), messageToSend);
+		sendMessageToChannel(channelName, client.getClientUsername(), client.getFullName(), messageToSend);
 	}
 	else
 	{
 		std::string channelList = getChannelListAsString();
 		std::string message = CHANNEL_LIST + (channelList.empty() ? "No active channels at this time" : channelList) + "\n";
 		send(clientSocket, message.c_str(), message.length(), 0);
-		std::cout << client.getClientUsername() << ": " << userEntry << std::endl;
+		std::cout << client.getClientUsername() << ": " << userEntry << std::endl; // !DEBUG
 	}
 	return;
 }
