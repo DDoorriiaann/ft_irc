@@ -75,7 +75,7 @@ private:
 	void	_addUser(sockaddr_in& addrClient);
 	int		_resetFd(fd_set& read_fd_set);
 	void	_handelChatEntry(Client& client, int clientSocket);
-	void	_handleCmd(std::istringstream& iss, std::string& command, Client &client, int clientSocket);
+	void	_handleCmd(std::istringstream& iss, std::string& command, Client& client, int clientSocket);
 	void	_checkNewEntries(fd_set read_fd_set);
 	int		_checkClientStatus(Client& client, std::string clientEntry, int clientSocket, int clientStatus);
 	int		_isPwd(std::string clientEntry);
@@ -84,7 +84,7 @@ private:
 	void	_nick(std::istringstream& iss, Client& client, int clientSocket);
 	void	_kick(std::istringstream& iss, Client& client, int clientSocket);
 	void	_joinCmd(std::istringstream& iss, Client client, int clientSocket);
-	void	_handelSimpleChat(Client client, char buf[], int clientSocket, bool isHexChatCmd);
+	void	_handelSimpleChat(Client client, char buf[], int clientSocket);
 	void	_unsetClient(Client& client);
 
 	std::string			_serverPwd;

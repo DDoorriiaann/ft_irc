@@ -100,10 +100,8 @@ bool Server::leaveChannel(const std::string& channelName, const std::string& use
 			// Si l'utilisateur est le dernier opérateur, supprimer la channel
 			_channels.erase(it);
 		}
-
 		return true;
 	}
-
 	return false;
 }
 
@@ -157,7 +155,7 @@ void Server::sendMessageToChannel(const std::string& channelName, const std::str
 		}
 
 		// Construire le message complet à envoyer
-		std::string fullMessage = "\n[" + channelName + "] " + username + ": " + message + "\n";
+		std::string fullMessage = "[" + channelName + "] " + username + ": " + message + "\n";
 
 		//Envoyer le message à tous les utilisateurs de la channel
 		std::set<std::string>::const_iterator it;

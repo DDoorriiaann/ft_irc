@@ -87,7 +87,6 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 {
 	std::string header;
 	std::string command;
-	bool 		isHexChatCmd = false;
 	int			ret;
 	char		buf[1024];
 
@@ -119,15 +118,14 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 		return;
 	}
 
-	if (header.compare("cmd") == 0)
+	if (header.compare("cmd") != 0 && header.compare("/cmd") != 0)
 	{
-		iss >> command;
-		isHexChatCmd = true;
+		std::cout << "header : " << header << " \n" << std::endl; // !DEBUG
+		send(clientSocket, &CMD_NOT_FOUND, sizeof(CMD_NOT_FOUND), 0);
+		return;
 	}
-	else
-		command = header;
 
-
+	iss >> command;
 
 	// Vérifier si le message commence par un slash (/)
 	if (command[0] == IS_CMD)
@@ -140,7 +138,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	{
 		// Traiter le message en tant que message de chat normal
 		std::cout << "Simple message detected." << std::endl; // !DEBUG
-		_handelSimpleChat(client, buf, clientSocket, isHexChatCmd);
+		_handelSimpleChat(client, buf, clientSocket);
 	}
 }
 
@@ -148,7 +146,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 ///////////////	HANDLE CMD 
 //////////////////////////////////
 
-void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client &client, int clientSocket)
+void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client& client, int clientSocket)
 {
 	std::cout << " \'/\' detected" << std::endl; // !DEBUG
 
@@ -206,16 +204,14 @@ void	Server::_joinCmd(std::istringstream& iss, Client client, int clientSocket)
 ///////////////	HANDLE SIMPLE CHAT
 //////////////////////////////////
 
-void	Server::_handelSimpleChat(Client client, char buf[], int clientSocket, bool isHexChatCmd)
+void	Server::_handelSimpleChat(Client client, char buf[], int clientSocket)
 {
 	std::string 		message(buf);
 	std::string			channelIndicator;
 	std::istringstream	iss(message);
 
 	iss >> channelIndicator;
-
-	if (isHexChatCmd)
-		iss >> channelIndicator;
+	iss >> channelIndicator;
 
 	if (channelIndicator.size() > 1 && channelIndicator[0] == '#')
 	{
