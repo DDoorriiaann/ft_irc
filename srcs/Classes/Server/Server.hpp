@@ -13,7 +13,6 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-#include <poll.h>
 #include <vector>
 #include <map>
 #include <sstream>
