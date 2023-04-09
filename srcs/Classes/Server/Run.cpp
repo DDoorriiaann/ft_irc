@@ -170,18 +170,15 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	iss >> command;
 
 	// Vérifier si le message commence par un slash (/)
-	if (command[0] == IS_CMD)
-	{
-		// Traite les commandes donnees par le client
-		std::cout << "Command detected." << std::endl; // !DEBUG
+	if (command[0] != '#') 
 		_handleCmd(iss, command, client, clientSocket);
-	}
 	else
 	{
-		// Traiter le message en tant que message de chat normal
+		// Traite les commandes donnees par le client
 		std::cout << "Simple message detected." << std::endl; // !DEBUG
 		_handelSimpleChat(client, userEntry, clientSocket);
 	}
+	return ;
 }
 
 ///////////////////////////////////
@@ -192,44 +189,50 @@ void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client& c
 {
 	std::cout << " \'/\' detected" << std::endl; // !DEBUG
 
-	command = command.substr(1);
 	// Extraire la commande et les arguments du message
 	// std::string message(buf + 1);
 	// std::istringstream iss(message);
 	if (command == JOIN_COMMAND)
 	{
 		_joinCmd(iss, client, clientSocket);
+		return ;
 	}
 	else if (command == MSG_COMMAND)
 	{
 		_sendPrivateChat(iss, client, clientSocket);
+		return ;
 	}
 	else if (command == NICK_COMMAND)
 	{
 		_nick(iss, client, clientSocket);
+		return ;
 	}
 	else if (command == KICK_COMMAND)
 	{
 		_kick(iss, client, clientSocket);
+		return ;
 	}
 	else if (command == PART_COMMAND)
 	{
 		_part(iss, client, clientSocket);
+		return ;
 	}
 	else if (command == MODE_COMMAND)
 	{
 		_mode(iss, client, clientSocket);
+		return ;
 	}
 	else if (command == BOT_COMMAND)
 	{
 		_bot(iss, clientSocket);
+		return ;
 	}
 	else
 	{
 		// ERROR MESSAGE: Command not found.
 		send(clientSocket, &CMD_NOT_FOUND, sizeof(CMD_NOT_FOUND), 0);
 	}
-	return;
+	return ;
 }
 
 void	Server::_joinCmd(std::istringstream& iss, Client client, int clientSocket)
