@@ -98,6 +98,7 @@ private:
 	void	_closeAllSocket(void);
 	int		_checkHaveFullEntry(Client& client, char buf[], int ret);
 	int		_checkNoWhiteSpace(std::string str);
+	void	_sendAllMsgToClient(std::istringstream& iss, Client& client, int destSocket, int clientSocket, std::string destUserName);
 
 	std::string			_serverPwd;
 	int					_socketServer;
