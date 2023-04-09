@@ -12,6 +12,7 @@ Bot::Bot(): continue_execution(true) {
 
 Bot::~Bot() {
 	pthread_mutex_destroy(&execution_mutex);
+	std::cout << "The Bot is gone, bye bye little bot, you were so kind, snif." << std::endl;
 }
 
 void Bot::start() {

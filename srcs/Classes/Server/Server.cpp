@@ -19,6 +19,7 @@ Server::~Server() //Canonical
 	if (_theBot != NULL)
 	{
 		_theBot->stop();
+		std::cout << "Waiting for Bot to shut down" << std::endl;
 		_theBot->join();
 		delete _theBot;
 	}
