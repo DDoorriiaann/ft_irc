@@ -12,6 +12,7 @@
 #include "Server.hpp"
 
 #define BAD_PASSWORD 			"Bad password.\n"
+#define	CONNECTION_FAILED			"[ERROR]: An error occurred during the connection.\n[INFO] DISCONNECT by the server.\n"
 #define USERNAME_ALREADY_SET 	"[ERROR] Username already set.\n"
 #define SPACE_IN_USERNAME 		"[ERROR] Space in username.\n"
 #define EMPTY_USERNAME 			"[ERROR] Empty username.\n"
@@ -49,16 +50,15 @@ int	Server::_checkClientStatus(Client& client, std::string clientEntry, int clie
 
 			usernameStream >> parsedUsername;
 			usernameStream >> parsedUsername;
-			if (clientEntry.empty())
+			if (parsedUsername.empty())
 			{
-				send(clientSocket, &EMPTY_USERNAME, sizeof(EMPTY_USERNAME), 0);
-				send(clientSocket, &MSG_ENTER_USRNM, sizeof(MSG_ENTER_USRNM), 0);
+				send(clientSocket, &CONNECTION_FAILED, sizeof(CONNECTION_FAILED), 0);
 				close(clientSocket);
 				_unsetClient(client);
 				_nbrClient--;
 				return (STOP);
 			}
-			if (_checkNoWhiteSpace(clientEntry) == FAILURE)
+			if (_checkNoWhiteSpace(parsedUsername) == FAILURE)
 			{
 				send(clientSocket, &SPACE_IN_USERNAME, sizeof(SPACE_IN_USERNAME), 0);
 				send(clientSocket, &MSG_ENTER_USRNM, sizeof(MSG_ENTER_USRNM), 0);
