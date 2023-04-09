@@ -49,7 +49,7 @@ int	Server::_checkClientStatus(Client& client, std::string clientEntry, int clie
 
 			usernameStream >> parsedUsername;
 			usernameStream >> parsedUsername;
-			if (clientEntry.empty())
+			if (parsedUsername.empty())
 			{
 				send(clientSocket, &EMPTY_USERNAME, sizeof(EMPTY_USERNAME), 0);
 				send(clientSocket, &MSG_ENTER_USRNM, sizeof(MSG_ENTER_USRNM), 0);
@@ -58,7 +58,7 @@ int	Server::_checkClientStatus(Client& client, std::string clientEntry, int clie
 				_nbrClient--;
 				return (STOP);
 			}
-			if (_checkNoWhiteSpace(clientEntry) == FAILURE)
+			if (_checkNoWhiteSpace(parsedUsername) == FAILURE)
 			{
 				send(clientSocket, &SPACE_IN_USERNAME, sizeof(SPACE_IN_USERNAME), 0);
 				send(clientSocket, &MSG_ENTER_USRNM, sizeof(MSG_ENTER_USRNM), 0);

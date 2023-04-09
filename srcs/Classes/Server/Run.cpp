@@ -12,19 +12,20 @@
 #include "Server.hpp"
 #include <signal.h>
 
-#define	IS_CMD '/'
-#define	JOIN_COMMAND "JOIN"
-#define	MSG_COMMAND "MSG"
-#define	NICK_COMMAND "NICK"
-#define KICK_COMMAND "KICK"
-#define MODE_COMMAND "MODE"
-#define PART_COMMAND "PART"
-#define BOT_COMMAND "BOT"
-#define QUIT_COMMAND_HEXCHAT "QUIT"
-#define	CMD_NOT_FOUND "[ERROR]: Command not found\n"
-#define	CHANNEL_NOT_FOUND "[ERROR]: Channel not found\n"
-#define	CHANNEL_LIST "No channel specified, active channels are : "
-#define CHANNEL_REQUIRES_HASHTAG "[ERROR]: A channel name must start with '#'\n"
+#define	IS_CMD						'/'
+#define	JOIN_COMMAND				"JOIN"
+#define	MSG_COMMAND					"MSG"
+#define	NICK_COMMAND 				"NICK"
+#define KICK_COMMAND				"KICK"
+#define MODE_COMMAND 				"MODE"
+#define PART_COMMAND 				"PART"
+#define BOT_COMMAND					 "BOT"
+#define QUIT_COMMAND_HEXCHAT		"QUIT"
+#define	CMD_NOT_FOUND 				"[ERROR]: Command not found\n"
+#define	CONNECTION_FAILED			"[ERROR]: An error occurred during the connection.\n"
+#define	CHANNEL_NOT_FOUND 			"[ERROR]: Channel not found\n"
+#define	CHANNEL_LIST 				"No channel specified, active channels are : "
+#define CHANNEL_REQUIRES_HASHTAG	"[ERROR]: A channel name must start with '#'\n"
 
 bool	QUIT_SERVER = false;
 
@@ -77,7 +78,7 @@ int	Server::_resetFd(fd_set& read_fd_set)
 
 void	Server::_addUser(sockaddr_in& addrClient)
 {
-	Client		client("unknown");
+	Client		client("");
 	socklen_t	csize = sizeof(int);
 	int			socketClient;
 
@@ -110,7 +111,6 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	int			ret;
 	char		buf[1024];
 
-
 	ret = recv(clientSocket, &buf, sizeof(buf), 0);
 	if (ret == 0)
 	{
@@ -127,7 +127,6 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	std::cout << "Client sends : \"" << userEntry << "\"" << std::endl << std::endl; // !DEBUG
 	if (_checkClientStatus(client, userEntry, clientSocket, client.getClientStatus()) == STOP)
 		return;
-
 	// Vérifier si le message provient d'une commande HexChat:
 	std::string 		message(userEntry);
 	std::istringstream	iss(message);
@@ -145,6 +144,14 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	if (header.compare("cmd") != 0 && header.compare("/cmd") != 0)
 	{
 		std::cout << "header : " << header << " \n" << std::endl; // !DEBUG
+		if (client.getClientUsername() == "")
+		{
+			send(clientSocket, &CONNECTION_FAILED, sizeof(CONNECTION_FAILED), 0);
+			close(clientSocket);
+			_unsetClient(client);
+			_nbrClient--;
+			return ;
+		}
 		send(clientSocket, &CMD_NOT_FOUND, sizeof(CMD_NOT_FOUND), 0);
 		return;
 	}
