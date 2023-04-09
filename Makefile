@@ -1,6 +1,6 @@
 NAME = ircserv
 CPP = g++
-CPPFLAGS = -Wall -Wextra -Werror -std=c++98
+CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -pthread
 
 SRCDIR = srcs
 SRC = 	Classes/Client/Client.cpp\
