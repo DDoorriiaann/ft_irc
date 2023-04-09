@@ -103,6 +103,16 @@ void	Server::_checkNewEntries(fd_set read_fd_set)
 ///////////////	HANDLE CHAT ENTRY
 //////////////////////////////////
 
+std::string	deleteBufferedWriter(std::string string)
+{
+	unsigned long found;
+
+	found = string.find("\r", 0);
+	if (found != std::string::npos)
+		string = string.substr(0, string.length() - 1);
+	return (string);
+}
+
 void	Server::_handelChatEntry(Client& client, int clientSocket)
 {
 	std::string userEntry;
@@ -123,6 +133,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 		return;
 	userEntry = client.getUserEntry();
 	userEntry = userEntry.substr(0, userEntry.length() - 1);
+	userEntry = deleteBufferedWriter(userEntry);
 	client.wipeUserEntry();
 	std::cout << "Client sends : \"" << userEntry << "\"" << std::endl << std::endl; // !DEBUG
 	if (_checkClientStatus(client, userEntry, clientSocket, client.getClientStatus()) == STOP)
