@@ -13,6 +13,8 @@
 #include <signal.h>
 
 #define	IS_CMD						'/'
+#define	PASS_COMMAND				"PASS"
+#define	USER_COMMAND				"USER"
 #define	JOIN_COMMAND				"JOIN"
 #define	MSG_COMMAND					"MSG"
 #define	NICK_COMMAND 				"NICK"
@@ -131,14 +133,12 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	}
 	if (_checkHaveFullEntry(client, buf, ret) == FAILURE)
 		return;
+
 	userEntry = client.getUserEntry();
 	userEntry = userEntry.substr(0, userEntry.length() - 1);
 	userEntry = deleteBufferedWriter(userEntry);
 	client.wipeUserEntry();
-	std::cout << "Client sends : \"" << userEntry << "\"" << std::endl << std::endl; // !DEBUG
-	if (_checkClientStatus(client, userEntry, clientSocket, client.getClientStatus()) == STOP)
-		return;
-	// Vérifier si le message provient d'une commande HexChat:
+
 	std::string 		message(userEntry);
 	std::istringstream	iss(message);
 
@@ -156,13 +156,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	{
 		std::cout << "header : " << header << " \n" << std::endl; // !DEBUG
 		if (client.getClientUsername() == "")
-		{
-			send(clientSocket, &CONNECTION_FAILED, sizeof(CONNECTION_FAILED), 0);
-			close(clientSocket);
-			_unsetClient(client);
-			_nbrClient--;
 			return ;
-		}
 		send(clientSocket, &CMD_NOT_FOUND, sizeof(CMD_NOT_FOUND), 0);
 		return;
 	}
@@ -185,14 +179,39 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 ///////////////	HANDLE CMD 
 //////////////////////////////////
 
+#define	ENTER_PWD_FIRST			"[ERROR]: Enter the password first.\n[INFO]: Use /cmd PAS <password>.\n"
+#define	ACCESS_DENIED	 		"[ERROR]: Access denied.\n[INFO]: Use /cmd USER <username> to finish the connection.\n"
+
 void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client& client, int clientSocket)
 {
-	std::cout << " \'/\' detected" << std::endl; // !DEBUG
+	std::cout << "Cmd: \"" << command << "\"." << std::endl; // !DEBUG
 
 	// Extraire la commande et les arguments du message
 	// std::string message(buf + 1);
 	// std::istringstream iss(message);
-	if (command == JOIN_COMMAND)
+	if (command == PASS_COMMAND)
+	{
+		_passCmd(iss, client, clientSocket);
+		return ;
+	}
+
+	if (client.getClientStatus() == PWD_ENTRY_STATUS)
+	{
+		send(clientSocket, &ENTER_PWD_FIRST, sizeof(ENTER_PWD_FIRST), 0);
+		return ;
+	}
+	else if (command == USER_COMMAND)
+	{
+		_userCmd(iss, client, clientSocket);
+		return ;
+	}
+
+	if (client.getClientStatus() != CONNECTED)
+	{
+		send(clientSocket, &ACCESS_DENIED, sizeof(ACCESS_DENIED), 0);
+		return ;
+	}
+	else if (command == JOIN_COMMAND)
 	{
 		_joinCmd(iss, client, clientSocket);
 		return ;
@@ -220,11 +239,6 @@ void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client& c
 	else if (command == MODE_COMMAND)
 	{
 		_mode(iss, client, clientSocket);
-		return ;
-	}
-	else if (command == BOT_COMMAND)
-	{
-		_bot(iss, clientSocket);
 		return ;
 	}
 	else

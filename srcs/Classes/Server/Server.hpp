@@ -3,7 +3,6 @@
 
 #include "../Client/Client.hpp"
 #include "../Channel/Channel.hpp"
-#include "../Bot/Bot.hpp"
 #include <iostream>
 #include <string>
 #include <netinet/in.h>
@@ -36,7 +35,6 @@
 #define	NEW_USER_MSG 					"[INFO]: New user on DG-Chat 🎉"
 #define	MSG_SENT_SUCCESS				"[INFO]: Your message has been send.\n"
 #define	MSG_WRONG_PWD					"[ERROR]: Wrong Password.\n"
-#define	MSG_ENTER_USRNM					"[INFO]: Enter an username: "
 #define	WELCOME							"[INFO]: Connected. Now logging in. \n"
 
 class Client;
@@ -71,10 +69,6 @@ public:
 	const std::string getChannelListAsString(void) const;
 	const std::map<std::string, Channel>& getChannels() const;
 
-	//BOT
-	void 	startBot();
-	void 	stopBot();
-
 private:
 
 	void	_addUser(sockaddr_in& addrClient);
@@ -99,13 +93,14 @@ private:
 	int		_checkHaveFullEntry(Client& client, char buf[], int ret);
 	int		_checkNoWhiteSpace(std::string str);
 	void	_sendAllMsgToClient(std::istringstream& iss, Client& client, int destSocket, int clientSocket, std::string destUserName);
+	void	_passCmd(std::istringstream& iss, Client& client, int clientSocket);
+	void	_userCmd(std::istringstream& iss, Client& client, int clientSocket);
 
 	std::string			_serverPwd;
 	int					_socketServer;
 	int					_nbrClient;
 	std::vector<Client>	_client;
 	std::map<std::string, Channel> _channels;
-	Bot* _theBot;
 };
 
 #endif 
