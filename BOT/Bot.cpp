@@ -65,14 +65,23 @@ int	main(int ac, char** av)
 	}
 	// Gérer le signal ctrl-c (SIGINT)
 	signal(SIGINT, sigint_handler);
+	signal(SIGPIPE, sigint_handler);
 
 	//// Bot connect to the server
-	send(socketClient, password.c_str(), password.length(), 0);
+	if (!quit)
+		send(socketClient, password.c_str(), password.length(), 0);
 	sleep(2);
-	send(socketClient, &"/cmd USER PasEncore13h13Bot\n", sizeof("/cmd USER PasEncore13h13Bot\n"), 0);
-
-	load_messages(funny_messages);
-	nb_messages = funny_messages.size();
+	int sentBytes = send(socketClient, &"/cmd USER PasEncore13h13Bot\n", sizeof("/cmd USER PasEncore13h13Bot\n"), 0);
+	if (sentBytes < 0)
+	{
+		std::cout << "send error" << std::endl;
+		return 1;
+	}
+	if (!quit)
+	{
+		load_messages(funny_messages);
+		nb_messages = funny_messages.size();
+	}
 	while (quit == false)
 	{
 		index = rand() % nb_messages;
@@ -80,15 +89,24 @@ int	main(int ac, char** av)
 		send(socketClient, message.c_str(), message.length(), 0);
 		sleep(10);
 	}
-	message = "QUIT\n";
-	send(socketClient, message.c_str(), message.length(), 0);
+	if (!quit)
+	{
+		message = "QUIT\n";
+		send(socketClient, message.c_str(), message.length(), 0);
+	}
+	std::cout << "BOT is gone, bye bye little bot!" << std::endl;
 	return (0);
 }
 
 void sigint_handler(int sig)
 {
-	if (sig == SIGINT)
+	if (sig == SIGINT || sig == SIGPIPE)
+	{
 		quit = true;
+		std::cout << "BOT DISCONNECTED BY SERVER, PROBABLY BECAUSE OF WRONG PASSWORD !!!" << std::endl;
+		std::cout << "BOT is shuting down" << std::endl;
+	}
+
 }
 
 static void load_messages(std::vector<std::string>& messages)

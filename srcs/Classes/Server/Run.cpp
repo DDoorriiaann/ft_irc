@@ -110,6 +110,7 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	int			ret;
 	char		buf[1024];
 
+	memset(buf, 0, sizeof(buf));
 	ret = recv(clientSocket, &buf, sizeof(buf), 0);
 	if (ret == 0)
 	{

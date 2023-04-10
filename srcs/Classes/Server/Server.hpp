@@ -70,7 +70,7 @@ private:
 	void	_handelSimpleChat(Client client, std::string userEntry, int clientSocket);
 	void	_unsetClient(Client& client);
 	void	_closeAllSocket(void);
-	int		_checkHaveFullEntry(Client& client, char buf[], int ret);
+	int		_checkHaveFullEntry(Client& client, char buf[1024], int ret);
 	int		_checkNoWhiteSpace(std::string str);
 	void	_sendAllMsgToClient(std::istringstream& iss, Client& client, int destSocket, int clientSocket, std::string destUserName);
 	void	_passCmd(std::istringstream& iss, Client& client, int clientSocket);

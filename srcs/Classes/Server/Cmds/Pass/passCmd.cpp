@@ -23,6 +23,9 @@ void	Server::_passCmd(std::istringstream& iss, Client& client, int clientSocket)
 	if (passWord.empty() || passWord != _serverPwd)
 	{
 		send(clientSocket, &BAD_PASSWORD, sizeof(BAD_PASSWORD), 0);
+		close(clientSocket);
+		_unsetClient(client);
+		_nbrClient--;
 		return;
 	}
 
