@@ -17,6 +17,7 @@
 #define	USER_COMMAND				"USER"
 #define	JOIN_COMMAND				"JOIN"
 #define	MSG_COMMAND					"MSG"
+#define	BOT_COMMAND 				"BOT"
 #define	NICK_COMMAND 				"NICK"
 #define KICK_COMMAND				"KICK"
 #define MODE_COMMAND 				"MODE"
@@ -59,6 +60,10 @@ void	Server::run(void)
 			// Check All client if one are post something
 			_checkNewEntries(read_fd_set);
 		}
+		if (searchClient("PasEncore13h13Bot") != -1)
+			_botIsSet = 1;
+		else
+			_botIsSet = 0;
 	}
 	std::cout << "\n Server shutdown." << std::endl;
 	_closeAllSocket();
@@ -142,6 +147,8 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	std::string 		message(userEntry);
 	std::istringstream	iss(message);
 
+	if (client.getClientUsername() == "PasEncore13h13Bot")
+		_sendTimeToAllClient(userEntry);
 	iss >> header;
 	std::cout << "command : \n" << header << std::endl << std::endl; // !DEBUG
 	if (header.compare(QUIT_COMMAND_HEXCHAT) == 0)
@@ -209,6 +216,11 @@ void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client& c
 	if (client.getClientStatus() != CONNECTED)
 	{
 		send(clientSocket, &ACCESS_DENIED, sizeof(ACCESS_DENIED), 0);
+		return ;
+	}
+	else if (command == BOT_COMMAND)
+	{
+		_botCmd(iss, client, clientSocket);
 		return ;
 	}
 	else if (command == JOIN_COMMAND)
@@ -303,4 +315,16 @@ void	Server::_handelSimpleChat(Client client, std::string userEntry, int clientS
 		std::cout << client.getClientUsername() << ": " << userEntry << std::endl; // !DEBUG
 	}
 	return;
+}
+
+void	Server::_sendTimeToAllClient(std::string message)
+{
+	std::map<std::string, int>::iterator itbeg = _clientBotList.begin();
+
+	while (itbeg != _clientBotList.end())
+	{
+		send(itbeg->second, message.c_str(), message.length(), 0);
+		itbeg++;
+	}
+	return ;
 }

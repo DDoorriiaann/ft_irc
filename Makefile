@@ -12,6 +12,7 @@ SRC = 	Classes/Client/Client.cpp\
 		Classes/Server/Cmds/Nick/nick.cpp\
 		Classes/Server/Cmds/Pass/passCmd.cpp\
 		Classes/Server/Cmds/User/userCmd.cpp\
+		Classes/Server/Cmds/Bot/botCmd.cpp\
 		Classes/Server/Cmds/Kick/kick.cpp\
 		Classes/Server/Cmds/Part/part.cpp\
 		Classes/Server/Cmds/Mode/mode.cpp\

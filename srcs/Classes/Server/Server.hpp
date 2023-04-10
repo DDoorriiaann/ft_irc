@@ -95,12 +95,16 @@ private:
 	void	_sendAllMsgToClient(std::istringstream& iss, Client& client, int destSocket, int clientSocket, std::string destUserName);
 	void	_passCmd(std::istringstream& iss, Client& client, int clientSocket);
 	void	_userCmd(std::istringstream& iss, Client& client, int clientSocket);
+	void	_botCmd(std::istringstream& iss, Client& client, int clientSocket);
+	void	_sendTimeToAllClient(std::string message);
 
 	std::string			_serverPwd;
 	int					_socketServer;
 	int					_nbrClient;
 	std::vector<Client>	_client;
 	std::map<std::string, Channel> _channels;
+	std::map<std::string, int>	_clientBotList; // #BOT
+	bool						_botIsSet;
 };
 
 #endif 
