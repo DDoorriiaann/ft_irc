@@ -35,7 +35,6 @@
 #define	NEW_USER_MSG 					"[INFO]: New user on DG-Chat 🎉"
 #define	MSG_SENT_SUCCESS				"[INFO]: Your message has been send.\n"
 #define	MSG_WRONG_PWD					"[ERROR]: Wrong Password.\n"
-#define	MSG_ENTER_USRNM					"[INFO]: Enter an username: "
 #define	WELCOME							"[INFO]: Connected. Now logging in. \n"
 
 class Client;
