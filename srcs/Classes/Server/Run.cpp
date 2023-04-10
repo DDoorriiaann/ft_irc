@@ -12,24 +12,6 @@
 #include "Server.hpp"
 #include <signal.h>
 
-#define	IS_CMD						'/'
-#define	PASS_COMMAND				"PASS"
-#define	USER_COMMAND				"USER"
-#define	JOIN_COMMAND				"JOIN"
-#define	MSG_COMMAND					"MSG"
-#define	BOT_COMMAND 				"BOT"
-#define	NICK_COMMAND 				"NICK"
-#define KICK_COMMAND				"KICK"
-#define MODE_COMMAND 				"MODE"
-#define PART_COMMAND 				"PART"
-#define BOT_COMMAND					 "BOT"
-#define QUIT_COMMAND_HEXCHAT		"QUIT"
-#define	CMD_NOT_FOUND 				"[ERROR]: Command not found\n"
-#define	CONNECTION_FAILED			"[ERROR]: An error occurred during the connection.\n[INFO] DISCONNECT by the server.\n"
-#define	CHANNEL_NOT_FOUND 			"[ERROR]: Channel not found\n"
-#define	CHANNEL_LIST 				"No channel specified, active channels are : "
-#define CHANNEL_REQUIRES_HASHTAG	"[ERROR]: A channel name must start with '#'\n"
-
 bool	QUIT_SERVER = false;
 
 void	catchSignal(int sig)

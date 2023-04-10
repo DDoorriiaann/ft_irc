@@ -3,6 +3,7 @@
 
 #include "../Client/Client.hpp"
 #include "../Channel/Channel.hpp"
+#include "defines.hpp"
 #include <iostream>
 #include <string>
 #include <netinet/in.h>
@@ -15,27 +16,6 @@
 #include <vector>
 #include <map>
 #include <sstream>
-
-#define CONTINUE 1
-#define	STOP 0
-#define SUCCESS 1
-#define	FAILURE 0
-
-#define	PWD_ENTRY_STATUS		0
-#define USERNAME_ENTRY_STATUS	1
-#define	CONNECTED				2
-
-#define UNKNOWN -1
-
-#define HEADER_INFO						"[INFO]: "
-#define	HEADER_ERROR					"[ERROR]: "
-#define	HEADER_HXCHAT					"CAP LS 302"
-#define	MSG_CREATION_SUCCESS			"[INFO]: The server as been created succesfully ✅"
-#define	MSG_ENTER_PASSWORD				"[INFO]: Please enter the password.\n "
-#define	NEW_USER_MSG 					"[INFO]: New user on DG-Chat 🎉"
-#define	MSG_SENT_SUCCESS				"[INFO]: Your message has been send.\n"
-#define	MSG_WRONG_PWD					"[ERROR]: Wrong Password.\n"
-#define	WELCOME							"[INFO]: Connected. Now logging in. \n"
 
 class Client;
 class Server
@@ -84,7 +64,7 @@ private:
 	void	_nick(std::istringstream& iss, Client& client, int clientSocket);
 	void	_kick(std::istringstream& iss, Client& client, int clientSocket);
 	void	_mode(std::istringstream& iss, Client& client, int clientSocket);
-	void	_kickAllUsers(Channel& channel);
+	void	_kickAllUsersFromChannel(Channel& channel);
 	void	_part(std::istringstream& iss, Client& client, int clientSocket);
 	void	_joinCmd(std::istringstream& iss, Client client, int clientSocket);
 	void	_handelSimpleChat(Client client, std::string userEntry, int clientSocket);

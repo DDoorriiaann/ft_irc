@@ -11,13 +11,6 @@
 /* ************************************************************************** */
 #include "Server.hpp"
 
-#define BAD_PASSWORD 			"Bad password.\n"
-#define	CONNECTION_FAILED		"[ERROR]: An error occurred during the connection.\n[INFO] DISCONNECT by the server.\n"
-#define USERNAME_ALREADY_SET 	"[ERROR] Username already set.\n"
-#define SPACE_IN_USERNAME 		"[ERROR] Space in username.\n"
-#define EMPTY_USERNAME 			"[ERROR] Empty username.\n"
-#define	DISCONNECT				"[INFO] DISCONNECT.\n"
-
 int	Server::_checkClientStatus(Client& client, std::string clientEntry, int clientSocket, int clientStatus)
 {
 	if (clientStatus == PWD_ENTRY_STATUS && _isPwd(clientEntry) == FAILURE)
