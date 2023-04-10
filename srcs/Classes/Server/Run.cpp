@@ -189,50 +189,23 @@ void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client& c
 	}
 
 	if (client.getClientStatus() != CONNECTED)
-	{
 		send(clientSocket, &ACCESS_DENIED, sizeof(ACCESS_DENIED), 0);
-		return;
-	}
 	else if (command == BOT_COMMAND)
-	{
 		_botCmd(iss, client, clientSocket);
-		return;
-	}
 	else if (command == JOIN_COMMAND)
-	{
 		_joinCmd(iss, client, clientSocket);
-		return;
-	}
 	else if (command == MSG_COMMAND)
-	{
 		_sendPrivateChat(iss, client, clientSocket);
-		return;
-	}
 	else if (command == NICK_COMMAND)
-	{
 		_nick(iss, client, clientSocket);
-		return;
-	}
 	else if (command == KICK_COMMAND)
-	{
 		_kick(iss, client, clientSocket);
-		return;
-	}
 	else if (command == PART_COMMAND)
-	{
 		_part(iss, client, clientSocket);
-		return;
-	}
 	else if (command == MODE_COMMAND)
-	{
 		_mode(iss, client, clientSocket);
-		return;
-	}
 	else
-	{
-		// ERROR MESSAGE: Command not found.
 		send(clientSocket, &CMD_NOT_FOUND, sizeof(CMD_NOT_FOUND), 0);
-	}
 	return;
 }
 
