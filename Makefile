@@ -1,6 +1,7 @@
 NAME = ircserv
+BOTNAME = bot
 CPP = g++
-CPPFLAGS = -g -Wall -Wextra -Werror -std=c++98 -pthread
+CPPFLAGS = -g -Wall -Wextra -Werror -std=c++98
 
 SRCDIR = srcs
 SRC = 	Classes/Client/Client.cpp\
@@ -33,10 +34,15 @@ $(SRCDIR)/%.o: $(SRCDIR)/%.cpp
 
 clean:
 	rm -f $(OBJ)
+	rm -f BOT/Bot.o
 
 fclean: clean
 	rm -f $(NAME)
+	rm -f $(BOTNAME)
 
 re: fclean all
+
+bot:
+	g++ -Wall -Wextra -Werror -std=c++98 BOT/Bot.cpp -o $(BOTNAME)
 
 .PHONY: all clean fclean re

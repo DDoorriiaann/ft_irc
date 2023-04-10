@@ -87,7 +87,8 @@ int	main(int ac, char** av)
 
 void sigint_handler(int sig)
 {
-	quit = true;
+	if (sig == SIGINT)
+		quit = true;
 }
 
 static void load_messages(std::vector<std::string>& messages)
