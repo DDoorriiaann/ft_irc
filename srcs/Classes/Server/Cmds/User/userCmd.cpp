@@ -12,13 +12,6 @@
 
 #include "../../Server.hpp"
 
-#define	UNKNOWN					-1
-#define	NO_USERNAME				"[ERROR]: No username.\n[INFO]: Use /cmd USER <username> to finish the connection.\n"
-#define	USERNAME_ALREADY_SET	"[ERROR]: Username already set.\n"
-#define	SPACE_IN_USERNAME		"[ERROR]: In the username the spaces are forbidden.\n"
-#define	USERNAME_ALREADY_SET	"[ERROR]: Username already set.\n"
-#define	SUCCESS_CONNECTION		"[INFO]: You are now connected ✅\n"
-
 void	Server::_userCmd(std::istringstream& iss, Client& client, int clientSocket)
 {
 	std::string	message;
@@ -32,28 +25,28 @@ void	Server::_userCmd(std::istringstream& iss, Client& client, int clientSocket)
 	if (clientStatus == CONNECTED)
 	{
 		send(clientSocket, &USERNAME_ALREADY_SET, sizeof(USERNAME_ALREADY_SET), 0);
-		return ;
+		return;
 	}
 	else if (username.empty())
 	{
 		send(clientSocket, &NO_USERNAME, sizeof(NO_USERNAME), 0);
-		return ;
+		return;
 	}
 	else if (_checkNoWhiteSpace(username) == FAILURE)
 	{
 		send(clientSocket, &SPACE_IN_USERNAME, sizeof(SPACE_IN_USERNAME), 0);
-		return ;
+		return;
 	}
 	else if (searchClient(username) != UNKNOWN)
 	{
 		send(clientSocket, &USERNAME_ALREADY_SET, sizeof(USERNAME_ALREADY_SET), 0);
-		return ;
+		return;
 	}
 
 	client.setClientStatus(CONNECTED);
 	client.setClientUsername(username);
 	message += SUCCESS_CONNECTION;
-	message += "[INFO]: Welcome " + username + " to DG-CHAT 🎉\n"; 
+	message += "[INFO]: Welcome " + username + " to DG-CHAT 🎉\n";
 	send(clientSocket, message.c_str(), message.length(), 0);
-	return ;
+	return;
 }

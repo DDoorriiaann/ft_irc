@@ -46,11 +46,26 @@
 
 /////CHECK CLIENT STATUS///////
 
-#define BAD_PASSWORD 			"Bad password.\n"
 #define	CONNECTION_FAILED		"[ERROR]: An error occurred during the connection.\n[INFO] DISCONNECT by the server.\n"
 #define USERNAME_ALREADY_SET 	"[ERROR] Username already set.\n"
-#define SPACE_IN_USERNAME 		"[ERROR] Space in username.\n"
 #define EMPTY_USERNAME 			"[ERROR] Empty username.\n"
 #define	DISCONNECT				"[INFO] DISCONNECT.\n"
+
+//////PASS COMMANDS////////
+
+#define BAD_PASSWORD 			"[ERROR]: Bad password.\n[INFO]: Use /cmd PASS to enter the password.\n"
+#define	MSG_ENTER_USRNM			"[INFO]: Good password ✅\n[INFO]: Use /cmd USER <username> to finish the connection.\n"
+#define USERNAME_ALREADY_SET 	"[ERROR] Username already set.\n"
+#define EMPTY_USERNAME 			"[ERROR] Empty username.\n"
+#define	DISCONNECT				"[INFO] DISCONNECT.\n"
+#define	PWD_ALREADY_PAST		"[ERROR]: Password has already been transmitted.\n"
+#define	USE_USER_CMD			"[INFO]: Use /cmd USER <your username> to finish the connection.\n"
+
+///////USE COMMAND///////
+
+#define	UNKNOWN					-1
+#define	NO_USERNAME				"[ERROR]: No username.\n[INFO]: Use /cmd USER <username> to finish the connection.\n"
+#define	SPACE_IN_USERNAME		"[ERROR]: In the username the spaces are forbidden.\n"
+#define	SUCCESS_CONNECTION		"[INFO]: You are now connected ✅\n"
 
 #endif // DEF_HPP
