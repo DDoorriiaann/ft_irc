@@ -22,10 +22,14 @@
 #include <vector>
 #include <map>
 #include <sstream>
+#include <signal.h>
 
 static void load_messages(std::vector<std::string>& messages);
+void sigint_handler(int sig);
 
-int	main(int ac, char **av)
+bool quit = false;
+
+int	main(int ac, char** av)
 {
 	struct	sockaddr_in			addrClient;
 	std::vector<std::string>	funny_messages;
@@ -43,13 +47,24 @@ int	main(int ac, char **av)
 	password += "\n";
 	port = atoi(av[1]);
 	socketClient = socket(AF_INET, SOCK_STREAM, 0);
+	if (socketClient < 0) {
+		std::cerr << "Erreur lors de la création de la socket" << std::endl;
+		return 1;
+	}
 
 	// This is the id of the socket.
 	addrClient.sin_addr.s_addr = htonl(INADDR_ANY);
 	addrClient.sin_family = AF_INET;
 	addrClient.sin_port = htons(port);
 
-	connect(socketClient, (const struct sockaddr *)&addrClient, sizeof(addrClient));
+	//connect(socketClient, (const struct sockaddr*)&addrClient, sizeof(addrClient));
+	if (connect(socketClient, (const struct sockaddr*)&addrClient, sizeof(addrClient)) < 0) {
+		std::cerr << "Erreur lors de la connexion au serveur" << std::endl;
+		close(socketClient);
+		return 1;
+	}
+	// Gérer le signal ctrl-c (SIGINT)
+	signal(SIGINT, sigint_handler);
 
 	//// Bot connect to the server
 	send(socketClient, password.c_str(), password.length(), 0);
@@ -58,14 +73,21 @@ int	main(int ac, char **av)
 
 	load_messages(funny_messages);
 	nb_messages = funny_messages.size();
-	while (1)
+	while (quit == false)
 	{
 		index = rand() % nb_messages;
 		message = funny_messages[index] + "\n";
 		send(socketClient, message.c_str(), message.length(), 0);
 		sleep(10);
 	}
+	message = "QUIT\n";
+	send(socketClient, message.c_str(), message.length(), 0);
 	return (0);
+}
+
+void sigint_handler(int sig)
+{
+	quit = true;
 }
 
 static void load_messages(std::vector<std::string>& messages)
