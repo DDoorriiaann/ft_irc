@@ -12,7 +12,7 @@
 #include "Server.hpp"
 
 #define BAD_PASSWORD 			"Bad password.\n"
-#define	CONNECTION_FAILED			"[ERROR]: An error occurred during the connection.\n[INFO] DISCONNECT by the server.\n"
+#define	CONNECTION_FAILED		"[ERROR]: An error occurred during the connection.\n[INFO] DISCONNECT by the server.\n"
 #define USERNAME_ALREADY_SET 	"[ERROR] Username already set.\n"
 #define SPACE_IN_USERNAME 		"[ERROR] Space in username.\n"
 #define EMPTY_USERNAME 			"[ERROR] Empty username.\n"
