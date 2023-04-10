@@ -48,7 +48,7 @@ int	main(int ac, char** av)
 	port = atoi(av[1]);
 	socketClient = socket(AF_INET, SOCK_STREAM, 0);
 	if (socketClient < 0) {
-		std::cerr << "Erreur lors de la création de la socket" << std::endl;
+		std::cerr << "Error during socket creation" << std::endl;
 		return 1;
 	}
 
@@ -59,7 +59,7 @@ int	main(int ac, char** av)
 
 	//connect(socketClient, (const struct sockaddr*)&addrClient, sizeof(addrClient));
 	if (connect(socketClient, (const struct sockaddr*)&addrClient, sizeof(addrClient)) < 0) {
-		std::cerr << "Erreur lors de la connexion au serveur" << std::endl;
+		std::cerr << "Error during connection to server" << std::endl;
 		close(socketClient);
 		return 1;
 	}
@@ -92,39 +92,39 @@ void sigint_handler(int sig)
 
 static void load_messages(std::vector<std::string>& messages)
 {
-	messages.push_back("Not 13:13, try again.");
-	messages.push_back("It's almost not 13:13.");
-	messages.push_back("Wait, uh no, not 13:13.");
-	messages.push_back("Nice try, but it's not 13:13.");
-	messages.push_back("Nope, still not 13:13.");
-	messages.push_back("13:13? Not yet!");
-	messages.push_back("Almost there, but not 13:13.");
-	messages.push_back("Getting closer, but not 13:13.");
-	messages.push_back("13:13? Maybe later.");
-	messages.push_back("Hmm, not 13:13.");
-	messages.push_back("Not quite 13:13.");
-	messages.push_back("Hold on, not 13:13 yet.");
-	messages.push_back("13:13? Not so fast!");
-	messages.push_back("It's not 13:13, but nice guess.");
-	messages.push_back("Close, but no 13:13.");
-	messages.push_back("Keep trying, not 13:13.");
-	messages.push_back("13:13 is still hiding.");
-	messages.push_back("13:13? Not quite.");
-	messages.push_back("You're not 13:13, but close.");
-	messages.push_back("Good effort, but it's not 13:13.");
-	messages.push_back("13:13? Not this time!");
-	messages.push_back("Almost 13:13, but not quite.");
-	messages.push_back("13:13? You'll have to wait.");
-	messages.push_back("A little bit more, and it's 13:13.");
-	messages.push_back("Not 13:13, but you're getting warmer!");
-	messages.push_back("13:13? Not on my watch!");
-	messages.push_back("Keep guessing, it's not 13:13 yet.");
-	messages.push_back("Is it 13:13? Nope!");
-	messages.push_back("Oh, so close! But not 13:13.");
-	messages.push_back("It's not 13:13, but keep trying!");
-	messages.push_back("13:13? Not in this timeline!");
-	messages.push_back("Not 13:13, but you're persistent!");
-	messages.push_back("13:13? Good guess, but no.");
-	messages.push_back("Maybe next time, it's not 13:13.");
-	messages.push_back("No 13:13 here, try again later.");
+	messages.push_back("Not 13:13, try again.\n");
+	messages.push_back("It's almost not 13:13.\n");
+	messages.push_back("Wait, uh no, not 13:13.\n");
+	messages.push_back("Nice try, but it's not 13:13.\n");
+	messages.push_back("Nope, still not 13:13.\n");
+	messages.push_back("13:13? Not yet!\n");
+	messages.push_back("Almost there, but not 13:13.\n");
+	messages.push_back("Getting closer, but not 13:13.\n");
+	messages.push_back("13:13? Maybe later.\n");
+	messages.push_back("Hmm, not 13:13.\n");
+	messages.push_back("Not quite 13:13.\n");
+	messages.push_back("Hold on, not 13:13 yet.\n");
+	messages.push_back("13:13? Not so fast!\n");
+	messages.push_back("It's not 13:13, but nice guess.\n");
+	messages.push_back("Close, but no 13:13.\n");
+	messages.push_back("Keep trying, not 13:13.\n");
+	messages.push_back("13:13 is still hiding.\n");
+	messages.push_back("13:13? Not quite.\n");
+	messages.push_back("You're not 13:13, but close.\n");
+	messages.push_back("Good effort, but it's not 13:13.\n");
+	messages.push_back("13:13? Not this time!\n");
+	messages.push_back("Almost 13:13, but not quite.\n");
+	messages.push_back("13:13? You'll have to wait.\n");
+	messages.push_back("A little bit more, and it's 13:13.\n");
+	messages.push_back("Not 13:13, but you're getting warmer!\n");
+	messages.push_back("13:13? Not on my watch!\n");
+	messages.push_back("Keep guessing, it's not 13:13 yet.\n");
+	messages.push_back("Is it 13:13? Nope!\n");
+	messages.push_back("Oh, so close! But not 13:13.\n");
+	messages.push_back("It's not 13:13, but keep trying!\n");
+	messages.push_back("13:13? Not in this timeline!\n");
+	messages.push_back("Not 13:13, but you're persistent!\n");
+	messages.push_back("13:13? Good guess, but no.\n");
+	messages.push_back("Maybe next time, it's not 13:13.\n");
+	messages.push_back("No 13:13 here, try again later.\n");
 }
