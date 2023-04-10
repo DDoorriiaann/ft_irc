@@ -132,7 +132,6 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	if (client.getClientUsername() == "PasEncore13h13Bot")
 		_sendTimeToAllClient(userEntry);
 	iss >> header;
-	std::cout << "command : \n" << header << std::endl << std::endl; // !DEBUG
 	if (header.compare(QUIT_COMMAND_HEXCHAT) == 0)
 	{
 		close(clientSocket);
@@ -143,9 +142,8 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 
 	if (header.compare("cmd") != 0 && header.compare("/cmd") != 0)
 	{
-		std::cout << "header : " << header << " \n" << std::endl; // !DEBUG
 		if (client.getClientUsername() == "")
-			return ;
+			return;
 		send(clientSocket, &CMD_NOT_FOUND, sizeof(CMD_NOT_FOUND), 0);
 		return;
 	}
@@ -153,15 +151,14 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 	iss >> command;
 
 	// Vérifier si le message commence par un slash (/)
-	if (command[0] != '#') 
+	if (command[0] != '#')
 		_handleCmd(iss, command, client, clientSocket);
 	else
 	{
 		// Traite les commandes donnees par le client
-		std::cout << "Simple message detected." << std::endl; // !DEBUG
 		_handelSimpleChat(client, userEntry, clientSocket);
 	}
-	return ;
+	return;
 }
 
 ///////////////////////////////////
@@ -173,79 +170,74 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 
 void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client& client, int clientSocket)
 {
-	std::cout << "Cmd: \"" << command << "\"." << std::endl; // !DEBUG
-
 	// Extraire la commande et les arguments du message
-	// std::string message(buf + 1);
-	// std::istringstream iss(message);
 	if (command == PASS_COMMAND)
 	{
 		_passCmd(iss, client, clientSocket);
-		return ;
+		return;
 	}
 
 	if (client.getClientStatus() == PWD_ENTRY_STATUS)
 	{
 		send(clientSocket, &ENTER_PWD_FIRST, sizeof(ENTER_PWD_FIRST), 0);
-		return ;
+		return;
 	}
 	else if (command == USER_COMMAND)
 	{
 		_userCmd(iss, client, clientSocket);
-		return ;
+		return;
 	}
 
 	if (client.getClientStatus() != CONNECTED)
 	{
 		send(clientSocket, &ACCESS_DENIED, sizeof(ACCESS_DENIED), 0);
-		return ;
+		return;
 	}
 	else if (command == BOT_COMMAND)
 	{
 		_botCmd(iss, client, clientSocket);
-		return ;
+		return;
 	}
 	else if (command == JOIN_COMMAND)
 	{
 		_joinCmd(iss, client, clientSocket);
-		return ;
+		return;
 	}
 	else if (command == MSG_COMMAND)
 	{
 		_sendPrivateChat(iss, client, clientSocket);
-		return ;
+		return;
 	}
 	else if (command == NICK_COMMAND)
 	{
 		_nick(iss, client, clientSocket);
-		return ;
+		return;
 	}
 	else if (command == KICK_COMMAND)
 	{
 		_kick(iss, client, clientSocket);
-		return ;
+		return;
 	}
 	else if (command == PART_COMMAND)
 	{
 		_part(iss, client, clientSocket);
-		return ;
+		return;
 	}
 	else if (command == MODE_COMMAND)
 	{
 		_mode(iss, client, clientSocket);
-		return ;
+		return;
 	}
 	else
 	{
 		// ERROR MESSAGE: Command not found.
 		send(clientSocket, &CMD_NOT_FOUND, sizeof(CMD_NOT_FOUND), 0);
 	}
-	return ;
+	return;
 }
 
 void	Server::_joinCmd(std::istringstream& iss, Client client, int clientSocket)
 {
-	std::cout << "join detected" << std::endl; // !DEBUG
 	std::string channelName;
 
 	iss >> channelName;
@@ -280,7 +272,6 @@ void	Server::_handelSimpleChat(Client client, std::string userEntry, int clientS
 
 	if (channelIndicator.size() > 1 && channelIndicator[0] == '#')
 	{
-		std::cout << "check channel indicator : " << channelIndicator << std::endl; // !DEBUG
 		// Le message est destiné à une channel spécifique
 		std::string channelName = channelIndicator.substr(1);
 		std::string messageToSend;
@@ -294,7 +285,6 @@ void	Server::_handelSimpleChat(Client client, std::string userEntry, int clientS
 		std::string channelList = getChannelListAsString();
 		std::string message = CHANNEL_LIST + (channelList.empty() ? "No active channels at this time" : channelList) + "\n";
 		send(clientSocket, message.c_str(), message.length(), 0);
-		std::cout << client.getClientUsername() << ": " << userEntry << std::endl; // !DEBUG
 	}
 	return;
 }
@@ -308,5 +298,5 @@ void	Server::_sendTimeToAllClient(std::string message)
 		send(itbeg->second, message.c_str(), message.length(), 0);
 		itbeg++;
 	}
-	return ;
+	return;
 }

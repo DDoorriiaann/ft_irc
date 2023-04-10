@@ -91,7 +91,6 @@ std::string	Client::getFullName(void) const
 	FullName = this->_username;
 	if (this->_nickName != "")
 		FullName += " (" + this->_nickName + ")";
-	std::cout << "FullName: " << FullName << std::endl; // !DEBUG
 	return (FullName);
 }
 
