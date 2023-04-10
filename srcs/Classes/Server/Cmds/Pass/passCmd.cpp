@@ -36,6 +36,5 @@ void	Server::_passCmd(std::istringstream& iss, Client& client, int clientSocket)
 
 	send(clientSocket, &MSG_ENTER_USRNM, sizeof(MSG_ENTER_USRNM), 0);
 	client.setClientStatus(USERNAME_ENTRY_STATUS);
-	std::cout << "Good PASSWORD" << std::endl;
 	return;
 }

@@ -2,13 +2,11 @@
 
 Server::Server(void) //Canonical
 {
-	std::cout << "Server Constructor called." << std::endl;
 	return;
 }
 
 Server::Server(Server const& copy) //Canonical
 {
-	std::cout << "Server Constructor called." << std::endl;
 	*this = copy;
 }
 
@@ -97,9 +95,7 @@ int	Server::_checkHaveFullEntry(Client& client, char buf[], int ret)
 	found = std::string(buf).find("\n", 0);
 	if (found != std::string::npos)
 	{
-		std::cout << "SUCCESS: " << client.getUserEntry() << std::endl;
 		return (SUCCESS);
 	}
-	std::cout << "FAIL: " << client.getUserEntry() << std::endl;
 	return (FAILURE);
 }

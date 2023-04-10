@@ -45,7 +45,5 @@ void	Server::init(int port, std::string pwd)
 		std::cerr << "Error during listen initialization" << std::endl;
 		return;
 	}
-
-	std::cout << MSG_CREATION_SUCCESS << std::endl;
 	return;
 }

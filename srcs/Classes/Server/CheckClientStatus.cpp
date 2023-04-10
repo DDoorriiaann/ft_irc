@@ -71,10 +71,8 @@ int	Server::_isPwd_hexchat(std::string clientEntry)
 
 int	Server::_isPwd(std::string clientEntry)
 {
-	std::cout << "Client Entry: \"" << clientEntry.length() << "\" mdp: \"" << _serverPwd.length() << "\"" << std::endl;
 	if (clientEntry == _serverPwd)
 		return (SUCCESS);
-	std::cout << "NON" << std::endl;
 	return (FAILURE);
 }
 

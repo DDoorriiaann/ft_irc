@@ -50,9 +50,7 @@ bool Server::leaveChannel(const std::string& channelName, const std::string& use
 
 	if (it != _channels.end()) {
 		bool isOperator = it->second.isOperator(user);
-		std::cout << "operator count before leaving :" << it->second.operatorCount() << std::endl;
 		it->second.leave(user, isOperator);
-		std::cout << "operator count after leaving :" << it->second.operatorCount() << std::endl;
 
 		if (isOperator && it->second.operatorCount() == 0) {
 			// Si l'utilisateur est le dernier opérateur, supprimer la channel et kick tous les users
