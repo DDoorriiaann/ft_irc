@@ -80,7 +80,8 @@ void	Server::_closeAllSocket(void)
 {
 	for (int i = 0; i < _nbrClient; i++)
 		close(getClient(i).getClientSocket());
-	close(_socketServer);
+	if (_socketServer > 0)
+		close(_socketServer);
 	return;
 }
 

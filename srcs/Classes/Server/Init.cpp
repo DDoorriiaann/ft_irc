@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "Server.hpp"
 
-void	Server::init(int port, std::string pwd)
+int	Server::init(int port, std::string pwd)
 {
 	struct	sockaddr_in	addrServer;
 
@@ -19,7 +19,7 @@ void	Server::init(int port, std::string pwd)
 	_socketServer = socket(AF_INET, SOCK_STREAM, 0);
 	if (_socketServer < 0) {
 		std::cerr << "Error during socket creation" << std::endl;
-		return;
+		return (FAILURE);
 	}
 
 	_nbrClient = 0;
@@ -28,7 +28,7 @@ void	Server::init(int port, std::string pwd)
 	int enable = 1;
 	if (setsockopt(_socketServer, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0) {
 		std::cerr << "Error during socket configuration" << std::endl;
-		return;
+		return (FAILURE);
 	}
 
 	// This is the id of the socket.
@@ -38,12 +38,12 @@ void	Server::init(int port, std::string pwd)
 
 	if (bind(_socketServer, (const struct sockaddr*)&addrServer, sizeof(addrServer)) < 0) {
 		std::cerr << "Error during socket binding" << std::endl;
-		return;
+		return (FAILURE);
 	}
 
 	if (listen(_socketServer, 10) < 0) {
 		std::cerr << "Error during listen initialization" << std::endl;
-		return;
+		return(FAILURE);
 	}
-	return;
+	return (SUCCESS);
 }

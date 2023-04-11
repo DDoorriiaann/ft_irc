@@ -18,6 +18,13 @@ void	Server::_nick(std::istringstream& iss, Client& client, int clientSocket)
 	std::string message;
 
 	getline(iss, nickName);
+	if (nickName.empty() || (nickName[0] == ' ' && nickName.length() == 1))
+	{
+		message += HEADER_ERROR;
+		message += "Empty nickname.\n";
+		send(clientSocket, message.c_str(), message.length(), 0);
+		return ;	
+	}
 	nickName = nickName.substr(1);
 	if (_checkNoWhiteSpace(nickName) == FAILURE)
 	{

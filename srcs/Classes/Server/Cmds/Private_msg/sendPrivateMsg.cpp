@@ -21,7 +21,6 @@ int Server::_sendPrivateChat(std::istringstream& iss, Client& client, int client
 	std::string	message;
 	int			destClientIndex;
 	int			destSocket;
-	(void)client;
 
 	iss >> destUserName;
 	destClientIndex = searchClient(destUserName);

@@ -51,15 +51,7 @@ void	Server::_mode(std::istringstream& iss, Client& client, int clientSocket)
 		send(clientSocket, message.c_str(), message.length(), 0);
 		return;
 	}
-	// vérifier si l'utilisateur existe dans la DB
-	// si l'utilisateur n'existe pas on renvoie un message a l'opérateur
-	if (!channel->hasUser(userToOp))
-	{
-		// envoyer un message informant que l'utilisateur demandé n'est pas trouvé sur la channel
-		message = "[ERROR]: User not found\n";
-		send(clientSocket, message.c_str(), message.length(), 0);
-		return;
-	}
+
 
 	// si l'utilisateur existe on le kick
 	if (flag == "-o")
@@ -82,6 +74,15 @@ void	Server::_mode(std::istringstream& iss, Client& client, int clientSocket)
 
 	else
 	{
+		// vérifier si l'utilisateur existe dans la DB
+		// si l'utilisateur n'existe pas on renvoie un message a l'opérateur
+		if (!channel->hasUser(userToOp))
+		{
+			// envoyer un message informant que l'utilisateur demandé n'est pas trouvé sur la channel
+			message = "[ERROR]: User not found\n";
+			send(clientSocket, message.c_str(), message.length(), 0);
+			return;
+		}
 		if (channel->isOperator(userToOp))
 		{
 			message = "[ERROR]: User is already an operator\n";
@@ -95,5 +96,4 @@ void	Server::_mode(std::istringstream& iss, Client& client, int clientSocket)
 		message = "[INFO]: User nammed " + userToOp + " is now an operator of the channel " + channelName + "\n";
 		send(clientSocket, message.c_str(), message.length(), 0);
 	}
-
 }

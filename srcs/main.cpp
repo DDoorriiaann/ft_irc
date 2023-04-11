@@ -28,7 +28,8 @@ int	main(int ac, char **av)
 	if (checkPort(av[PORT_INDEX]) == FAILURE)
 		return (EXIT_FAILURE);
 
-	server.init(atoi(av[PORT_INDEX]), av[PWD_INDEX]);
+	if (server.init(atoi(av[PORT_INDEX]), av[PWD_INDEX]) == FAILURE)
+		return (EXIT_FAILURE);
 	server.run();
 	return (EXIT_SUCCESS);
 }

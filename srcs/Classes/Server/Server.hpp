@@ -29,7 +29,7 @@ public:
 	Server& operator=(Server const& rhs); //Canonical
 
 	void	run(void);
-	void	init(int port, std::string pwd);
+	int		init(int port, std::string pwd);
 
 	int		getServerSocket(void) const;
 	int		getNbrClient(void) const;

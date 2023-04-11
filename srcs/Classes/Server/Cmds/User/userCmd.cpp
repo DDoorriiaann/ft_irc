@@ -19,7 +19,6 @@ void	Server::_userCmd(std::istringstream& iss, Client& client, int clientSocket)
 	int			clientStatus;
 
 	getline(iss, username);
-	username = username.substr(1);
 	clientStatus = client.getClientStatus();
 
 	if (clientStatus == CONNECTED)
@@ -32,7 +31,8 @@ void	Server::_userCmd(std::istringstream& iss, Client& client, int clientSocket)
 		send(clientSocket, &NO_USERNAME, sizeof(NO_USERNAME), 0);
 		return;
 	}
-	else if (_checkNoWhiteSpace(username) == FAILURE)
+	username = username.substr(1);
+	if (_checkNoWhiteSpace(username) == FAILURE)
 	{
 		send(clientSocket, &SPACE_IN_USERNAME, sizeof(SPACE_IN_USERNAME), 0);
 		return;

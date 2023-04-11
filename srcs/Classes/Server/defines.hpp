@@ -53,13 +53,15 @@
 
 //////PASS COMMANDS////////
 
-#define BAD_PASSWORD 			"[ERROR]: Bad password.\n[INFO]: Use /cmd PASS to enter the password.\n"
+#define BAD_PASSWORD 			"[ERROR]: Bad password.\n[INFO]: DISCONNECTED\n"
 #define	MSG_ENTER_USRNM			"[INFO]: Good password ✅\n[INFO]: Use /cmd USER <username> to finish the connection.\n"
 #define USERNAME_ALREADY_SET 	"[ERROR] Username already set.\n"
 #define EMPTY_USERNAME 			"[ERROR] Empty username.\n"
 #define	DISCONNECT				"[INFO] DISCONNECT.\n"
 #define	PWD_ALREADY_PAST		"[ERROR]: Password has already been transmitted.\n"
 #define	USE_USER_CMD			"[INFO]: Use /cmd USER <your username> to finish the connection.\n"
+#define	ENTER_PWD_FIRST			"[ERROR]: Enter the password first.\n[INFO]: Use /cmd PASS <password>.\n"
+#define	ACCESS_DENIED	 		"[ERROR]: Access denied.\n[INFO]: Use /cmd USER <username> to finish the connection.\n"
 
 ///////USE COMMAND///////
 

@@ -20,7 +20,6 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <vector>
-#include <map>
 #include <sstream>
 #include <signal.h>
 
@@ -84,8 +83,15 @@ int	main(int ac, char** av)
 	}
 	while (quit == false)
 	{
-		index = rand() % nb_messages;
-		message = funny_messages[index] + "\n";
+		time_t now = time(0);
+		tm* local_time = localtime(&now);
+		if (local_time->tm_hour == 13 && local_time->tm_min == 13)
+			message = "It's 13h13\n";
+		else
+		{
+			index = rand() % nb_messages;
+			message = funny_messages[index];
+		}
 		send(socketClient, message.c_str(), message.length(), 0);
 		sleep(10);
 	}
@@ -103,7 +109,8 @@ void sigint_handler(int sig)
 	if (sig == SIGINT || sig == SIGPIPE)
 	{
 		quit = true;
-		std::cout << "BOT DISCONNECTED BY SERVER, PROBABLY BECAUSE OF WRONG PASSWORD !!!" << std::endl;
+		if (sig == SIGPIPE)
+			std::cout << "BOT DISCONNECTED BY SERVER, PROBABLY BECAUSE OF WRONG PASSWORD !!!" << std::endl;
 		std::cout << "BOT is shuting down" << std::endl;
 	}
 
@@ -147,3 +154,4 @@ static void load_messages(std::vector<std::string>& messages)
 	messages.push_back("Maybe next time, it's not 13:13.\n");
 	messages.push_back("No 13:13 here, try again later.\n");
 }
+

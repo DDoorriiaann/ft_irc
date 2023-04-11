@@ -143,8 +143,6 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 
 	if (header.compare("cmd") != 0 && header.compare("/cmd") != 0)
 	{
-		if (client.getClientUsername() == "")
-			return;
 		send(clientSocket, &CMD_NOT_FOUND, sizeof(CMD_NOT_FOUND), 0);
 		return;
 	}
@@ -165,9 +163,6 @@ void	Server::_handelChatEntry(Client& client, int clientSocket)
 ///////////////////////////////////
 ///////////////	HANDLE CMD 
 //////////////////////////////////
-
-#define	ENTER_PWD_FIRST			"[ERROR]: Enter the password first.\n[INFO]: Use /cmd PAS <password>.\n"
-#define	ACCESS_DENIED	 		"[ERROR]: Access denied.\n[INFO]: Use /cmd USER <username> to finish the connection.\n"
 
 void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client& client, int clientSocket)
 {
@@ -266,7 +261,7 @@ void	Server::_handelSimpleChat(Client client, std::string userEntry, int clientS
 void	Server::_sendTimeToAllClient(std::string message)
 {
 	std::map<std::string, int>::iterator itbeg = _clientBotList.begin();
-
+	message += "\n";
 	while (itbeg != _clientBotList.end())
 	{
 		send(itbeg->second, message.c_str(), message.length(), 0);

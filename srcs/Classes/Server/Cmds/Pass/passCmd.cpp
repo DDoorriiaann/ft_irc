@@ -17,10 +17,17 @@ void	Server::_passCmd(std::istringstream& iss, Client& client, int clientSocket)
 	int			clientStatus;
 
 	getline(iss, passWord);
-	passWord = passWord.substr(1);
 	clientStatus = client.getClientStatus();
-
-	if (passWord.empty() || passWord != _serverPwd)
+	if (passWord.empty())
+	{
+		send(clientSocket, &BAD_PASSWORD, sizeof(BAD_PASSWORD), 0);
+		close(clientSocket);
+		_unsetClient(client);
+		_nbrClient--;
+		return ;
+	}
+	passWord = passWord.substr(1);
+	if (passWord != _serverPwd)
 	{
 		send(clientSocket, &BAD_PASSWORD, sizeof(BAD_PASSWORD), 0);
 		close(clientSocket);
@@ -28,7 +35,6 @@ void	Server::_passCmd(std::istringstream& iss, Client& client, int clientSocket)
 		_nbrClient--;
 		return;
 	}
-
 	if (clientStatus != PWD_ENTRY_STATUS)
 	{
 		send(clientSocket, &PWD_ALREADY_PAST, sizeof(PWD_ALREADY_PAST), 0);

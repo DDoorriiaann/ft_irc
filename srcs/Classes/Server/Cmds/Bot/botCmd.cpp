@@ -11,10 +11,8 @@
 /* ************************************************************************** */
 
 #include "../../Server.hpp"
-#define	IS_START		"[INFO]: The Bot \"PasEncore13h13Bot\" is now available.\n"
-#define	IS_STOP		"[INFO]: The Bot \"PasEncore13h13Bot\" is now unavailable.\n"
-#define	ALREADY_START "[ERROR]: The Bot \"PasEncore13h13Bot\" is already START.\n"
-#define	ALREADY_STOP "[ERROR]: The Bot \"PasEncore13h13Bot\" is already STOP.\n"
+
+#define WRONG_REQUEST "[ERROR]: unknown command\n"
 
 void	Server::_botCmd(std::istringstream& iss, Client& client, int clientSocket)
 {
@@ -22,34 +20,23 @@ void	Server::_botCmd(std::istringstream& iss, Client& client, int clientSocket)
 	std::string	message;
 
 	getline(iss, mode);
+	if (mode.empty())
+	{
+		send(clientSocket, &WRONG_REQUEST, sizeof(WRONG_REQUEST), 0);
+		return ;
+	}
 	mode = mode.substr(1);
-	if (mode == "start")
+	if (mode == "register")
 	{
 		if (_clientBotList.count(client.getClientUsername()) == 0)
-		{
 			_clientBotList[client.getClientUsername()] = clientSocket;
-			send(clientSocket, &IS_START, sizeof(IS_START), 0);
-			return ;
-		}
-		else
-		{
-			send(clientSocket, &ALREADY_START, sizeof(ALREADY_START), 0);
-			return ;
-		}
 	}
-	else if (mode == "stop")
+	else if (mode == "unregister")
 	{
 		if (_clientBotList.count(client.getClientUsername()) == 1)
-		{
 			_clientBotList.erase(client.getClientUsername());
-			send(clientSocket, &IS_STOP, sizeof(IS_STOP), 0);
-			return ;
-		}
-		else
-		{
-			send(clientSocket, &ALREADY_STOP, sizeof(ALREADY_STOP), 0);
-			return;
-		}
 	}
+	else
+		send(clientSocket, &WRONG_REQUEST, sizeof(WRONG_REQUEST), 0);
 	return;
 }
