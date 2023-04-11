@@ -69,7 +69,12 @@ void	Server::_mode(std::istringstream& iss, Client& client, int clientSocket)
 		message = "[INFO]: User nammed " + userToOp + " is not anymore an operator of the channel " + channelName + "\n";
 		send(clientSocket, message.c_str(), message.length(), 0);
 		if (channel->operatorCount() == 0)
+		{
 			_kickAllUsersFromChannel(*channel);
+			_channels.erase(channelName);
+			std::cout << "Channel " << channelName << " has been deleted" << std::endl;
+		}
+
 	}
 
 	else

@@ -95,6 +95,11 @@ const std::set<std::string>& Channel::getOperators() const {
 
 ////// KICK USERS //////
 
+void Channel::clearUsers()
+{
+	_users.clear();
+}
+
 void Channel::kickUser(const std::string& user) {
 	_users.erase(user);
 }

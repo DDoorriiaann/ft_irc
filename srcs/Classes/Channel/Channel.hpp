@@ -24,6 +24,7 @@ public:
 	void unsetOperator(const std::string& user);
 	bool isOperator(const std::string& user) const;
 	void kickUser(const std::string& user);
+	void clearUsers();
 	size_t operatorCount() const;
 
 	const std::set<std::string>& getUsers() const;
