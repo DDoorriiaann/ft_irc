@@ -200,6 +200,8 @@ void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client& c
 		_part(iss, client, clientSocket);
 	else if (command == MODE_COMMAND)
 		_mode(iss, client, clientSocket);
+	else if (command == NOTICE_COMMAND)
+		_sendNotice(iss, client, clientSocket);
 	else
 		send(clientSocket, &CMD_NOT_FOUND, sizeof(CMD_NOT_FOUND), 0);
 	return;

@@ -60,6 +60,7 @@ private:
 	int		_isPwd(std::string clientEntry);
 	int		_isPwd_hexchat(std::string clientEntry);
 	int 	_sendPrivateChat(std::istringstream& iss, Client& client, int clientSocket);
+	int 	_sendNotice(std::istringstream& iss, Client& client, int clientSocket);
 	void	_bot(std::istringstream& iss, int clientSocket);
 	void	_nick(std::istringstream& iss, Client& client, int clientSocket);
 	void	_kick(std::istringstream& iss, Client& client, int clientSocket);
@@ -73,6 +74,7 @@ private:
 	int		_checkHaveFullEntry(Client& client, char buf[1024], int ret);
 	int		_checkNoWhiteSpace(std::string str);
 	void	_sendAllMsgToClient(std::istringstream& iss, Client& client, int destSocket, int clientSocket, std::string destUserName);
+	void	_sendAllNoticeClient(std::istringstream& iss, Client& client, int destSocket, int clientSocket, std::string destUserName);
 	void	_passCmd(std::istringstream& iss, Client& client, int clientSocket);
 	void	_userCmd(std::istringstream& iss, Client& client, int clientSocket);
 	void	_botCmd(std::istringstream& iss, Client& client, int clientSocket);
