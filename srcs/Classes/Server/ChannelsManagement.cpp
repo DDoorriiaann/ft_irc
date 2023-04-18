@@ -41,7 +41,14 @@ bool Server::joinChannel(const std::string& channelName, const std::string chann
 				return false;
 			}
 		}
+		if (it->second.isInviteOnly() && !it->second.isInvited(user)) {
+			std::string message = "[ERROR]: You're not invited to this channel\n";
+			send(userSocket, message.c_str(), message.size(), 0);
+			return false;
+		}
 		it->second.join(user);
+		if (it->second.isInviteOnly())
+			it->second.uninvite(user);
 		std::string message = "You're now member of the channel " + channelName + "\n";
 		send(userSocket, message.c_str(), message.size(), 0);
 	}

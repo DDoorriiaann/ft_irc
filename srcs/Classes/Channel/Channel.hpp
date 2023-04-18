@@ -37,6 +37,12 @@ public:
 	void setTopicProtection();
 	bool isTopicProtected() const;
 	void unsetTopicProtection();
+	void invite(const std::string& user);
+	void uninvite(const std::string& user);
+	void setInviteOnly();
+	void unsetInviteOnly();
+	bool isInviteOnly() const;
+	bool isInvited(const std::string& user) const;
 	const std::string& getTopic() const;
 	const std::set<std::string>& getUsers() const;
 	const std::set<std::string>& getOperators() const;
@@ -48,9 +54,10 @@ private:
 	int _limit;
 	bool _isKeyProtected;
 	bool _isTopicProtected;
+	bool _isInviteOnly;
+	std::set<std::string> _invitedUsers;
 	std::set<std::string> _users;
 	std::set<std::string> _operators;
-	std::set<std::string> _kickedUsers;
 };
 
 #endif /* ********************************************************* CHANNEL_H */

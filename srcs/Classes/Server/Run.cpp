@@ -204,6 +204,8 @@ void	Server::_handleCmd(std::istringstream& iss, std::string& command, Client& c
 		_sendNotice(iss, client, clientSocket);
 	else if (command == TOPIC_COMMAND)
 		_topic(iss, client, clientSocket);
+	else if (command == INVITE_COMMAND)
+		_invite(iss, client, clientSocket);
 	else
 		send(clientSocket, &CMD_NOT_FOUND, sizeof(CMD_NOT_FOUND), 0);
 	return;

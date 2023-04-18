@@ -38,6 +38,7 @@
 #define BOT_COMMAND					"BOT"
 #define NOTICE_COMMAND				"NOTICE"
 #define TOPIC_COMMAND				"TOPIC"
+#define INVITE_COMMAND				"INVITE"
 #define QUIT_COMMAND_HEXCHAT		"QUIT"
 #define	CMD_NOT_FOUND 				"Please use /cmd then your command (ex: /cmd JOIN #test)\n"
 #define	CONNECTION_FAILED			"[ERROR]: An error occurred during the connection.\n[INFO] DISCONNECT by the server.\n"

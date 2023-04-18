@@ -10,7 +10,7 @@ Channel::Channel(const Channel& src)
 	*this = src;
 }
 
-Channel::Channel(const std::string& name): _name(name), _limit(-1), _isKeyProtected(false), _isTopicProtected(false) {}
+Channel::Channel(const std::string& name): _name(name), _limit(-1), _isKeyProtected(false), _isTopicProtected(false), _isInviteOnly(false) {}
 
 
 
@@ -38,6 +38,7 @@ Channel& Channel::operator=(Channel const& rhs)
 		this->_operators = operatorsCopy;
 		this->_isKeyProtected = rhs._isKeyProtected;
 		this->_isTopicProtected = rhs._isTopicProtected;
+		this->_isInviteOnly = rhs._isInviteOnly;
 		this->_key = rhs._key;
 		this->_topic = rhs._topic;
 		this->_limit = rhs._limit;
@@ -150,6 +151,32 @@ bool Channel::isTopicProtected() const {
 
 void Channel::unsetTopicProtection() {
 	_isTopicProtected = false;
+}
+
+////// INVITE //////
+
+void Channel::invite(const std::string& user) {
+	_invitedUsers.insert(user);
+}
+
+void Channel::setInviteOnly() {
+	_isInviteOnly = true;
+}
+
+bool Channel::isInviteOnly() const {
+	return _isInviteOnly;
+}
+
+void Channel::unsetInviteOnly() {
+	_isInviteOnly = false;
+}
+
+bool Channel::isInvited(const std::string& user) const {
+	return _invitedUsers.find(user) != _invitedUsers.end();
+}
+
+void Channel::uninvite(const std::string& user) {
+	_invitedUsers.erase(user);
 }
 
 ////// KICK USERS //////

@@ -66,10 +66,13 @@ private:
 	void	_kick(std::istringstream& iss, Client& client, int clientSocket);
 	void	_mode(std::istringstream& iss, Client& client, int clientSocket);
 	void	_topic(std::istringstream& iss, Client& client, int clientSocket);
+	void	_invite(std::istringstream& iss, Client& client, int clientSocket);
 	void	_addOp(int clientSocket, Channel* channel, std::string channelName, std::string content);
 	void	_removeOp(int clientSocket, Channel* channel, std::string channelName, std::string content);
 	void	_setChannelKey(int clientSocket, Channel* channel, std::string channelName, std::string content);
 	void 	_setChannelLimit(int clientSocket, Channel* channel, std::string channelName, std::string content);
+	void	_setInviteOnly(int clientSocket, Channel* channel, std::string channelName);
+	void	_unsetInviteOnly(int clientSocket, Channel* channel, std::string channelName);
 	void 	_setTopicProtection(int clientSocket, Channel* channel, std::string channelName);
 	void	_removeChannelLimit(int clientSocket, Channel* channel, std::string channelName);
 	void	_removeChannelKey(int clientSocket, Channel* channel, std::string channelName);

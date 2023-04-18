@@ -86,8 +86,8 @@ void	Server::_mode(std::istringstream& iss, Client& client, int clientSocket)
 		_setTopicProtection(clientSocket, channel, channelName);
 	else if (flag == "-t")
 		_removeTopicProtection(clientSocket, channel, channelName);
-	// else if (flag == "+i")
-	// 	_setInviteOnly(clientSocket, channel, channelName);
-	// else if (flag == "-i")
-	// 	_removeInviteOnly(clientSocket, channel, channelName);
+	else if (flag == "+i")
+		_setInviteOnly(clientSocket, channel, channelName);
+	else if (flag == "-i")
+		_unsetInviteOnly(clientSocket, channel, channelName);
 }
