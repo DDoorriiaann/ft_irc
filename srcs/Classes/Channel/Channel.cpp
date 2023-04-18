@@ -39,6 +39,11 @@ Channel& Channel::operator=(Channel const& rhs)
 		this->_name = rhs._name;
 		this->_users = usersCopy;
 		this->_operators = operatorsCopy;
+		this->_isKeyProtected = rhs._isKeyProtected;
+		this->_isTopicProtected = rhs._isTopicProtected;
+		this->_key = rhs._key;
+		this->_topic = rhs._topic;
+		this->_limit = rhs._limit;
 	}
 	return *this;
 }
