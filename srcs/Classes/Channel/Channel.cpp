@@ -10,7 +10,10 @@ Channel::Channel(const Channel& src)
 	*this = src;
 }
 
-Channel::Channel(const std::string& name): _name(name), _limit(-1), _isKeyProtected(false) {}
+Channel::Channel(const std::string& name): _name(name), _isKeyProtected(false), _isTopicProtected(false) {
+
+	_limit = -1;
+}
 
 
 
@@ -111,6 +114,8 @@ std::string Channel::getKey() const {
 	return _key;
 }
 
+
+/// LIMIT /////
 void Channel::setLimit(int limit) {
 	_limit = limit;
 }
@@ -121,6 +126,28 @@ int Channel::getLimit() const {
 
 void Channel::unsetLimit() {
 	_limit = -1;
+}
+
+/////// TOPIC ///////
+
+void Channel::setTopic(const std::string& topic) {
+	_topic = topic;
+}
+
+const std::string& Channel::getTopic() const {
+	return _topic;
+}
+
+void Channel::setTopicProtection() {
+	_isTopicProtected = true;
+}
+
+bool Channel::isTopicProtected() const {
+	return _isTopicProtected;
+}
+
+void Channel::unsetTopicProtection() {
+	_isTopicProtected = false;
 }
 
 ////// KICK USERS //////

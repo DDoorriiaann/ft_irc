@@ -33,15 +33,21 @@ public:
 	void setLimit(int limit);
 	void unsetLimit();
 	int getLimit() const;
-
+	void setTopic(const std::string& topic);
+	void setTopicProtection();
+	bool isTopicProtected() const;
+	void unsetTopicProtection();
+	const std::string& getTopic() const;
 	const std::set<std::string>& getUsers() const;
 	const std::set<std::string>& getOperators() const;
 
 private:
 	std::string _name;
 	std::string _key;
+	std::string _topic;
 	int _limit;
 	bool _isKeyProtected;
+	bool _isTopicProtected;
 	std::set<std::string> _users;
 	std::set<std::string> _operators;
 	std::set<std::string> _kickedUsers;

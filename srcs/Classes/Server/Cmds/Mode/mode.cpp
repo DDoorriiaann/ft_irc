@@ -47,7 +47,6 @@ void	Server::_mode(std::istringstream& iss, Client& client, int clientSocket)
 	getline(iss, lastPart);
 	content = firstPart + lastPart;
 
-	std::cout << "content : " << content << std::endl;
 	if ((flag[1] == 'o' || flag == "+k" || flag == "+l") && content.empty())
 	{
 		message = "[ERROR]: missing parameter\n";
@@ -83,10 +82,10 @@ void	Server::_mode(std::istringstream& iss, Client& client, int clientSocket)
 		_setChannelLimit(clientSocket, channel, channelName, content);
 	else if (flag == "-l")
 		_removeChannelLimit(clientSocket, channel, channelName);
-	// else if (flag == "+t")
-	// 	_setTopicProtection(clientSocket, channel, channelName);
-	// else if (flag == "-t")
-	// 	_removeTopicProtection(clientSocket, channel, channelName);
+	else if (flag == "+t")
+		_setTopicProtection(clientSocket, channel, channelName);
+	else if (flag == "-t")
+		_removeTopicProtection(clientSocket, channel, channelName);
 	// else if (flag == "+i")
 	// 	_setInviteOnly(clientSocket, channel, channelName);
 	// else if (flag == "-i")

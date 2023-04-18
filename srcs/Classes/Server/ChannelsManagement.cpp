@@ -17,9 +17,10 @@ bool Server::joinChannel(const std::string& channelName, const std::string chann
 		Channel newChannel(channelName);
 		newChannel.setOperator(user);
 		newChannel.join(user);
-		_channels.insert(std::make_pair(channelName, newChannel));
+		newChannel.unsetLimit();
 		if (channelKey != "")
 			_channels[channelName].setKey(channelKey);
+		_channels.insert(std::make_pair(channelName, newChannel));
 		std::cout << "New channel created : " << channelName << std::endl;
 		std::string message = "You've just created a new channel : " + channelName + "\n";
 		send(userSocket, message.c_str(), message.size(), 0);
@@ -33,6 +34,7 @@ bool Server::joinChannel(const std::string& channelName, const std::string chann
 		}
 		if ((int)it->second.getLimit() != -1)
 		{
+			std::cout << "Channel limit : " << it->second.getLimit() << std::endl; // !DEBUG
 			if ((int)it->second.getUsers().size() >= it->second.getLimit()) {
 				std::string message = "[ERROR]: Channel is full\n";
 				send(userSocket, message.c_str(), message.size(), 0);

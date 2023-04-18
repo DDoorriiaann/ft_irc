@@ -65,12 +65,15 @@ private:
 	void	_nick(std::istringstream& iss, Client& client, int clientSocket);
 	void	_kick(std::istringstream& iss, Client& client, int clientSocket);
 	void	_mode(std::istringstream& iss, Client& client, int clientSocket);
+	void	_topic(std::istringstream& iss, Client& client, int clientSocket);
 	void	_addOp(int clientSocket, Channel* channel, std::string channelName, std::string content);
 	void	_removeOp(int clientSocket, Channel* channel, std::string channelName, std::string content);
 	void	_setChannelKey(int clientSocket, Channel* channel, std::string channelName, std::string content);
 	void 	_setChannelLimit(int clientSocket, Channel* channel, std::string channelName, std::string content);
+	void 	_setTopicProtection(int clientSocket, Channel* channel, std::string channelName);
 	void	_removeChannelLimit(int clientSocket, Channel* channel, std::string channelName);
 	void	_removeChannelKey(int clientSocket, Channel* channel, std::string channelName);
+	void 	_removeTopicProtection(int clientSocket, Channel* channel, std::string channelName);
 	void	_kickAllUsersFromChannel(Channel& channel);
 	void	_part(std::istringstream& iss, Client& client, int clientSocket);
 	void	_joinCmd(std::istringstream& iss, Client client, int clientSocket);
