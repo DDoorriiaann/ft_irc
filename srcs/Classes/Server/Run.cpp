@@ -219,7 +219,17 @@ void	Server::_joinCmd(std::istringstream& iss, Client client, int clientSocket)
 	}
 	channelName = channelName.substr(1); // Delete the #.
 	if (!channelName.empty())
-		joinChannel(channelName, client.getClientUsername());
+	{
+		std::string channelKey;
+		std::string firstPart;
+		std::string secondPart;
+
+		iss >> firstPart;
+		getline(iss, secondPart);
+		channelKey = firstPart + secondPart;
+		joinChannel(channelName, channelKey, client.getClientUsername());
+	}
+
 	else
 	{
 		// ERROR MESSAGE: Channel not found.

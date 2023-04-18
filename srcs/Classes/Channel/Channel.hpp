@@ -26,12 +26,18 @@ public:
 	void kickUser(const std::string& user);
 	void clearUsers();
 	size_t operatorCount() const;
+	void setKey(const std::string& key);
+	bool isKeyProtected() const;
+	void unsetKey();
+	std::string getKey() const;
 
 	const std::set<std::string>& getUsers() const;
 	const std::set<std::string>& getOperators() const;
 
 private:
 	std::string _name;
+	std::string _key;
+	bool _isKeyProtected;
 	std::set<std::string> _users;
 	std::set<std::string> _operators;
 	std::set<std::string> _kickedUsers;

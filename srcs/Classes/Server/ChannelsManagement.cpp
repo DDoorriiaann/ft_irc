@@ -8,7 +8,7 @@ bool Server::createChannel(const std::string& name) {
 	return false;
 }
 
-bool Server::joinChannel(const std::string& channelName, const std::string& user) {
+bool Server::joinChannel(const std::string& channelName, const std::string channelKey, const std::string& user) {
 	std::map<std::string, Channel>::iterator it = _channels.find(channelName);
 	int userSocket = _client[searchClient(user)].getClientSocket();
 
@@ -18,13 +18,19 @@ bool Server::joinChannel(const std::string& channelName, const std::string& user
 		newChannel.setOperator(user);
 		newChannel.join(user);
 		_channels.insert(std::make_pair(channelName, newChannel));
+		if (channelKey != "")
+			_channels[channelName].setKey(channelKey);
 		std::cout << "New channel created : " << channelName << std::endl;
-
 		std::string message = "You've just created a new channel : " + channelName + "\n";
 		send(userSocket, message.c_str(), message.size(), 0);
 	}
 	else {
 		// Sinon, rejoindre la channel existante
+		if (it->second.isKeyProtected() && it->second.getKey() != channelKey) {
+			std::string message = "[ERROR]: Wrong channel key\n";
+			send(userSocket, message.c_str(), message.size(), 0);
+			return false;
+		}
 		it->second.join(user);
 		std::string message = "You're now member of the channel " + channelName + "\n";
 		send(userSocket, message.c_str(), message.size(), 0);

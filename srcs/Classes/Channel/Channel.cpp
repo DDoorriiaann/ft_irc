@@ -10,7 +10,7 @@ Channel::Channel(const Channel& src)
 	*this = src;
 }
 
-Channel::Channel(const std::string& name): _name(name) {}
+Channel::Channel(const std::string& name): _name(name), _isKeyProtected(false) {}
 
 
 
@@ -92,6 +92,24 @@ const std::set<std::string>& Channel::getOperators() const {
 	return _operators;
 }
 
+/////// KEY ///////
+
+void Channel::setKey(const std::string& key) {
+	_key = key;
+	_isKeyProtected = true;
+}
+
+void Channel::unsetKey() {
+	_isKeyProtected = false;
+}
+
+bool Channel::isKeyProtected() const {
+	return _isKeyProtected;
+}
+
+std::string Channel::getKey() const {
+	return _key;
+}
 
 ////// KICK USERS //////
 

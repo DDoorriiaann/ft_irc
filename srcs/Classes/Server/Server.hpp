@@ -41,7 +41,7 @@ public:
 	//CHANNELS
 
 	bool 	createChannel(const std::string& name);
-	bool 	joinChannel(const std::string& channelName, const std::string& user);
+	bool 	joinChannel(const std::string& channelName, const std::string channelKey, const std::string& user);
 	bool 	leaveChannel(const std::string& channelName, const std::string& user);
 	bool 	isValidChannel(const std::string& channelName) const;
 	Channel* getChannel(const std::string& channelName);
@@ -52,7 +52,6 @@ public:
 private:
 
 	void	_addUser(sockaddr_in& addrClient);
-	void	_addOp(int clientSocket, Channel* channel, std::string channelName, std::string content);
 	int		_resetFd(fd_set& read_fd_set);
 	void	_handelChatEntry(Client& client, int clientSocket);
 	void	_handleCmd(std::istringstream& iss, std::string& command, Client& client, int clientSocket);
@@ -66,6 +65,10 @@ private:
 	void	_nick(std::istringstream& iss, Client& client, int clientSocket);
 	void	_kick(std::istringstream& iss, Client& client, int clientSocket);
 	void	_mode(std::istringstream& iss, Client& client, int clientSocket);
+	void	_addOp(int clientSocket, Channel* channel, std::string channelName, std::string content);
+	void	_removeOp(int clientSocket, Channel* channel, std::string channelName, std::string content);
+	void	_setChannelKey(int clientSocket, Channel* channel, std::string channelName, std::string content);
+	void	_removeChannelKey(int clientSocket, Channel* channel, std::string channelName);
 	void	_kickAllUsersFromChannel(Channel& channel);
 	void	_part(std::istringstream& iss, Client& client, int clientSocket);
 	void	_joinCmd(std::istringstream& iss, Client client, int clientSocket);

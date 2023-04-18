@@ -48,7 +48,7 @@ void	Server::_mode(std::istringstream& iss, Client& client, int clientSocket)
 	content = firstPart + lastPart;
 
 	std::cout << "content : " << content << std::endl;
-	if ((flag[1] == 'o' || flag[1] == 'k' || flag[1] == 'l') && content.empty())
+	if ((flag[1] == 'o' || flag == "+k" || flag == "+l") && content.empty())
 	{
 		message = "[ERROR]: missing parameter\n";
 		send(clientSocket, message.c_str(), message.length(), 0);
@@ -71,31 +71,12 @@ void	Server::_mode(std::istringstream& iss, Client& client, int clientSocket)
 		return;
 	}
 
-
-	// si l'utilisateur existe on le unop
 	if (flag == "-o")
-	{
-		if (!channel->isOperator(content))
-		{
-			message = "[ERROR]: User is not an operator\n";
-			send(clientSocket, message.c_str(), message.length(), 0);
-			return;
-		}
-		channel->unsetOperator(content);
-		message = "[INFO]: You (" + content + ") are not anymore an operator of the channel " + channelName + "\n";
-		send(getClient(searchClient(content)).getClientSocket(), message.c_str(), message.length(), 0);
-
-		message = "[INFO]: User nammed " + content + " is not anymore an operator of the channel " + channelName + "\n";
-		send(clientSocket, message.c_str(), message.length(), 0);
-		if (channel->operatorCount() == 0)
-		{
-			_kickAllUsersFromChannel(*channel);
-			_channels.erase(channelName);
-			std::cout << "Channel " << channelName << " has been deleted" << std::endl;
-		}
-
-	}
-
+		_removeOp(clientSocket, channel, channelName, content);
 	else if (flag == "+o")
 		_addOp(clientSocket, channel, channelName, content);
+	else if (flag == "+k")
+		_setChannelKey(clientSocket, channel, channelName, content);
+	else if (flag == "-k")
+		_removeChannelKey(clientSocket, channel, channelName);
 }
