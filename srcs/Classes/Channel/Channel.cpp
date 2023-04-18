@@ -10,7 +10,7 @@ Channel::Channel(const Channel& src)
 	*this = src;
 }
 
-Channel::Channel(const std::string& name): _name(name), _isKeyProtected(false) {}
+Channel::Channel(const std::string& name): _name(name), _limit(-1), _isKeyProtected(false) {}
 
 
 
@@ -109,6 +109,18 @@ bool Channel::isKeyProtected() const {
 
 std::string Channel::getKey() const {
 	return _key;
+}
+
+void Channel::setLimit(int limit) {
+	_limit = limit;
+}
+
+int Channel::getLimit() const {
+	return _limit;
+}
+
+void Channel::unsetLimit() {
+	_limit = -1;
 }
 
 ////// KICK USERS //////

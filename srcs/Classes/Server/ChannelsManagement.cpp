@@ -31,6 +31,14 @@ bool Server::joinChannel(const std::string& channelName, const std::string chann
 			send(userSocket, message.c_str(), message.size(), 0);
 			return false;
 		}
+		if ((int)it->second.getLimit() != -1)
+		{
+			if ((int)it->second.getUsers().size() >= it->second.getLimit()) {
+				std::string message = "[ERROR]: Channel is full\n";
+				send(userSocket, message.c_str(), message.size(), 0);
+				return false;
+			}
+		}
 		it->second.join(user);
 		std::string message = "You're now member of the channel " + channelName + "\n";
 		send(userSocket, message.c_str(), message.size(), 0);

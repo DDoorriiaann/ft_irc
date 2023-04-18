@@ -79,4 +79,16 @@ void	Server::_mode(std::istringstream& iss, Client& client, int clientSocket)
 		_setChannelKey(clientSocket, channel, channelName, content);
 	else if (flag == "-k")
 		_removeChannelKey(clientSocket, channel, channelName);
+	else if (flag == "+l")
+		_setChannelLimit(clientSocket, channel, channelName, content);
+	else if (flag == "-l")
+		_removeChannelLimit(clientSocket, channel, channelName);
+	// else if (flag == "+t")
+	// 	_setTopicProtection(clientSocket, channel, channelName);
+	// else if (flag == "-t")
+	// 	_removeTopicProtection(clientSocket, channel, channelName);
+	// else if (flag == "+i")
+	// 	_setInviteOnly(clientSocket, channel, channelName);
+	// else if (flag == "-i")
+	// 	_removeInviteOnly(clientSocket, channel, channelName);
 }

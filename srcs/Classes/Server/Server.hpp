@@ -68,6 +68,8 @@ private:
 	void	_addOp(int clientSocket, Channel* channel, std::string channelName, std::string content);
 	void	_removeOp(int clientSocket, Channel* channel, std::string channelName, std::string content);
 	void	_setChannelKey(int clientSocket, Channel* channel, std::string channelName, std::string content);
+	void 	_setChannelLimit(int clientSocket, Channel* channel, std::string channelName, std::string content);
+	void	_removeChannelLimit(int clientSocket, Channel* channel, std::string channelName);
 	void	_removeChannelKey(int clientSocket, Channel* channel, std::string channelName);
 	void	_kickAllUsersFromChannel(Channel& channel);
 	void	_part(std::istringstream& iss, Client& client, int clientSocket);

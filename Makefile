@@ -20,6 +20,7 @@ SRC = 	Classes/Client/Client.cpp\
 		Classes/Server/Cmds/Mode/mode.cpp\
 		Classes/Server/Cmds/Mode/o.cpp\
 		Classes/Server/Cmds/Mode/k.cpp\
+		Classes/Server/Cmds/Mode/l.cpp\
 		Classes/Server/Cmds/Notice/sendNotice.cpp\
 		Utils/checkPort.cpp\
 		Utils/checkWhiteSpace.cpp\

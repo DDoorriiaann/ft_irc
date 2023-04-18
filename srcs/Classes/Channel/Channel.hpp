@@ -30,6 +30,9 @@ public:
 	bool isKeyProtected() const;
 	void unsetKey();
 	std::string getKey() const;
+	void setLimit(int limit);
+	void unsetLimit();
+	int getLimit() const;
 
 	const std::set<std::string>& getUsers() const;
 	const std::set<std::string>& getOperators() const;
@@ -37,6 +40,7 @@ public:
 private:
 	std::string _name;
 	std::string _key;
+	int _limit;
 	bool _isKeyProtected;
 	std::set<std::string> _users;
 	std::set<std::string> _operators;
