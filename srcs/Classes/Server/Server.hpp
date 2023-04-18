@@ -52,6 +52,7 @@ public:
 private:
 
 	void	_addUser(sockaddr_in& addrClient);
+	void	_addOp(int clientSocket, Channel* channel, std::string channelName, std::string content);
 	int		_resetFd(fd_set& read_fd_set);
 	void	_handelChatEntry(Client& client, int clientSocket);
 	void	_handleCmd(std::istringstream& iss, std::string& command, Client& client, int clientSocket);

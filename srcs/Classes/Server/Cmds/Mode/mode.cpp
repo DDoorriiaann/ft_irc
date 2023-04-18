@@ -1,20 +1,27 @@
 #include "../../Server.hpp"
 
+static bool isValidFlag(std::string flag)
+{
+	if (flag == "-o" || flag == "+o" || flag == "-k" || flag == "+k" || flag == "-l" || flag == "+l" || flag == "-t" || flag == "+t" || flag == "-i" || flag == "+i")
+		return true;
+	return false;
+}
+
 void	Server::_mode(std::istringstream& iss, Client& client, int clientSocket)
 {
-
-
 	std::string message;
 	std::string flag;
 	std::string channelName;
 
 	iss >> flag;
-	if (flag != "-o" && flag != "+o")
+
+	if (isValidFlag(flag) == false)
 	{
 		message = "[ERROR]: Invalid flag\n";
 		send(clientSocket, message.c_str(), message.length(), 0);
 		return;
 	}
+
 	iss >> channelName;
 	if (channelName[0] != '#')
 	{
@@ -33,8 +40,20 @@ void	Server::_mode(std::istringstream& iss, Client& client, int clientSocket)
 		return;
 	}
 
-	std::string userToOp;
-	iss >> userToOp;
+	std::string content;
+	std::string firstPart;
+	std::string lastPart;
+	iss >> firstPart;
+	getline(iss, lastPart);
+	content = firstPart + lastPart;
+
+	std::cout << "content : " << content << std::endl;
+	if ((flag[1] == 'o' || flag[1] == 'k' || flag[1] == 'l') && content.empty())
+	{
+		message = "[ERROR]: missing parameter\n";
+		send(clientSocket, message.c_str(), message.length(), 0);
+		return;
+	}
 
 	Channel* channel = getChannel(channelName);
 	if (!channel)
@@ -53,20 +72,20 @@ void	Server::_mode(std::istringstream& iss, Client& client, int clientSocket)
 	}
 
 
-	// si l'utilisateur existe on le kick
+	// si l'utilisateur existe on le unop
 	if (flag == "-o")
 	{
-		if (!channel->isOperator(userToOp))
+		if (!channel->isOperator(content))
 		{
 			message = "[ERROR]: User is not an operator\n";
 			send(clientSocket, message.c_str(), message.length(), 0);
 			return;
 		}
-		channel->unsetOperator(userToOp);
-		message = "[INFO]: You (" + userToOp + ") are not anymore an operator of the channel " + channelName + "\n";
-		send(getClient(searchClient(userToOp)).getClientSocket(), message.c_str(), message.length(), 0);
+		channel->unsetOperator(content);
+		message = "[INFO]: You (" + content + ") are not anymore an operator of the channel " + channelName + "\n";
+		send(getClient(searchClient(content)).getClientSocket(), message.c_str(), message.length(), 0);
 
-		message = "[INFO]: User nammed " + userToOp + " is not anymore an operator of the channel " + channelName + "\n";
+		message = "[INFO]: User nammed " + content + " is not anymore an operator of the channel " + channelName + "\n";
 		send(clientSocket, message.c_str(), message.length(), 0);
 		if (channel->operatorCount() == 0)
 		{
@@ -77,28 +96,6 @@ void	Server::_mode(std::istringstream& iss, Client& client, int clientSocket)
 
 	}
 
-	else
-	{
-		// vérifier si l'utilisateur existe dans la DB
-		// si l'utilisateur n'existe pas on renvoie un message a l'opérateur
-		if (!channel->hasUser(userToOp))
-		{
-			// envoyer un message informant que l'utilisateur demandé n'est pas trouvé sur la channel
-			message = "[ERROR]: User not found\n";
-			send(clientSocket, message.c_str(), message.length(), 0);
-			return;
-		}
-		if (channel->isOperator(userToOp))
-		{
-			message = "[ERROR]: User is already an operator\n";
-			send(clientSocket, message.c_str(), message.length(), 0);
-			return;
-		}
-		channel->setOperator(userToOp);
-		message = "[INFO]: You (" + userToOp + ") are now an operator of the channel " + channelName + "\n";
-		send(getClient(searchClient(userToOp)).getClientSocket(), message.c_str(), message.length(), 0);
-
-		message = "[INFO]: User nammed " + userToOp + " is now an operator of the channel " + channelName + "\n";
-		send(clientSocket, message.c_str(), message.length(), 0);
-	}
+	else if (flag == "+o")
+		_addOp(clientSocket, channel, channelName, content);
 }
