@@ -10,10 +10,7 @@ Channel::Channel(const Channel& src)
 	*this = src;
 }
 
-Channel::Channel(const std::string& name): _name(name), _isKeyProtected(false), _isTopicProtected(false) {
-
-	_limit = -1;
-}
+Channel::Channel(const std::string& name): _name(name), _limit(-1), _isKeyProtected(false), _isTopicProtected(false) {}
 
 
 
