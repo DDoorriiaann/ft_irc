@@ -8,11 +8,19 @@ void	Server::_part(std::istringstream& iss, Client& client, int clientSocket)
 	std::string username = client.getClientUsername();
 	std::string message;
 	std::string channelName;
+	std::string	check;
 	iss >> channelName;
+	iss >> check;
 	if (channelName[0] != '#')
 	{
 		// envoyer un message expliquant que la channel doit commencer par #
 		message = "[ERROR]: A channel name always start with a \'#\'\n";
+		send(clientSocket, message.c_str(), message.length(), 0);
+		return;
+	}
+	if (!check.empty())
+	{
+		message = "[ERROR]: too many parameters.\n";
 		send(clientSocket, message.c_str(), message.length(), 0);
 		return;
 	}
