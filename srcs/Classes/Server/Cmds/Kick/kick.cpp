@@ -29,7 +29,9 @@ void	Server::_kick(std::istringstream& iss, Client& client, int clientSocket)
 
 
 	std::string userToKick;
+	std::string check;
 	iss >> userToKick;
+	iss >> check;
 
 
 	Channel* channel = getChannel(channelName);
@@ -37,6 +39,12 @@ void	Server::_kick(std::istringstream& iss, Client& client, int clientSocket)
 	{
 		//envoyer une message disant que la channel n'existe plus
 		message = "[ERROR]: Channel not found\n";
+		send(clientSocket, message.c_str(), message.length(), 0);
+		return;
+	}
+	if (!check.empty())
+	{
+		message = "[ERROR]: too many parameters.\n";
 		send(clientSocket, message.c_str(), message.length(), 0);
 		return;
 	}

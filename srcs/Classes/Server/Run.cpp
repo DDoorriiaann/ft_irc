@@ -31,6 +31,7 @@ void	Server::run(void)
 	int						lastFd;
 
 	signal(SIGINT, catchSignal);
+	std::cout << "[INFO]: Server has been created !" << std::endl;
 	while (QUIT_SERVER == false)
 	{
 		lastFd = _resetFd(read_fd_set);
